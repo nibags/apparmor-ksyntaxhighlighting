@@ -1,8 +1,8 @@
-# Syntax Highlighting Definition Files for Editors Kate and KWrite
+# Syntax Highlighting Definition File for AppArmor Profiles, for Editors Kate and KWrite
 
 Author: Nibaldo González (<nibgonz@gmail.com>) (Valparaíso, Chile)
 
-Last Change: August 03, 2017
+Last Change: August 09, 2017
 
 ## Description:
 
