@@ -22,7 +22,7 @@
   	* Version 1 [22-Feb-2017, by Nibaldo González (nibgonz@gmail.com)]:
 		- Initial version.
 		- Support for profile syntax of Apparmor 2.11.
-	* Version 2 [03-Aug-2017, by Nibaldo González]:
+	* Version 2 [10-Aug-2017, by Nibaldo González]:
 		- Improvements in highlighting and bug fixes.
 		- Each rule has its own context.
 		- The profile name is highlighted in the profile header and profile transition rules.
@@ -512,6 +512,7 @@
 				<StringDetect context="_include" attribute="Preprocessor" String="#include" insensitive="true"/>
 				<WordDetect context="_include" attribute="Preprocessor" String="include" insensitive="true"/>
 				<DetectChar context="_comment" attribute="Comment" char="#"/>
+				<Detect2Chars context="_variable_declaration" attribute="Variable" char="@" char1="{" lookAhead="true" firstNonSpace="true"/>
 				<Detect2Chars context="_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
 				
 				<IncludeRules context="_brackets_error"/>
@@ -618,6 +619,25 @@
 			</context>
 			<context name="_variable_simple" attribute="Normal Text" lineEndContext="#stay">
 				<RegExpr context="#stay" attribute="Variable" String="@\{&varname;\}" insensitive="true"/>
+			</context>
+
+			<context name="_variable_declaration" attribute="Variable" lineEndContext="#pop">
+				<RegExpr context="#pop!_variable_declaration_op" attribute="Variable" String="\}(?=\s*\+?\=.*[^,\s]\s*$)" insensitive="true"/> <!-- = or += -->
+				<IncludeRules context="_variable"/>
+			</context>
+			<context name="_variable_declaration_op" attribute="Operator 1" lineEndContext="#pop">
+				<DetectChar context="#pop!_variable_declaration_cont" attribute="Operator 1" char="="/>
+			</context>
+			<context name="_variable_declaration_cont" attribute="Path" lineEndContext="#pop">
+				<IncludeRules context="_pcre_escape_str"/>
+				<IncludeRules context="_path_globbing_chars"/>
+				<IncludeRules context="_common"/>
+				<IncludeRules context="_path"/>
+				<IncludeRules context="_text_quoted"/>
+				<IncludeRules context="_globbrackets_rule"/>
+				<DetectChar context="_r_parenthesis" attribute="Globbing Brackets" char="("/>
+				<Detect2Chars context="_subprofile" attribute="SubProfile Operator" char="/" char1="/"/>
+				<DetectChar context="#stay" attribute="Operator 1" char="+"/>
 			</context>
 			
 			<!-- Access Modes (File Permissions) -->
