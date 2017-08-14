@@ -510,7 +510,7 @@
 				
 				<!-- Preamble -->
 				<StringDetect context="_include" attribute="Preprocessor" String="#include" insensitive="true"/>
-				<WordDetect context="_include" attribute="Preprocessor" String="include" insensitive="true"/>
+				<RegExpr context="_include" attribute="Preprocessor" String="(^\s*|\s)include(?=\s)" insensitive="true"/>
 				<DetectChar context="_comment" attribute="Comment" char="#"/>
 				<Detect2Chars context="_variable_declaration" attribute="Variable" char="@" char1="{" lookAhead="true" firstNonSpace="true"/>
 				<Detect2Chars context="_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
@@ -551,7 +551,7 @@
 			
 			<context name="_common" attribute="Normal Text" lineEndContext="#stay">
 				<StringDetect context="#stay" attribute="Error" String="#include" insensitive="true"/>
-				<WordDetect context="#stay" attribute="Error" String="include" insensitive="true"/>
+				<RegExpr context="#stay" attribute="Error" String="include(?=\s)" insensitive="true" firstNonSpace="true"/>
 				<DetectChar context="_comment" attribute="Comment" char="#"/>
 				<Detect2Chars context="_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
 				<IncludeRules context="_brackets_error"/>
