@@ -2,14 +2,14 @@
 
 Author: Nibaldo González (<nibgonz@gmail.com>) (Valparaíso, Chile)
 
-Last Change: August 29, 2017
+Last Change: September 17, 2017
 
 ## Description:
 
 Add syntax highlighting to KDE text editors Kate and KWrite 
 for the following languages:
 
-	- AppArmor Security Profiles (apparmor.xml)
+	- AppArmor Security Profiles (apparmor.xml) [16-Sept-2017: This file is part of KatePart]
 
 This syntax highlighting definition consists of XML files, 
 which are stored in:

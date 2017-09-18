@@ -37,7 +37,7 @@
 		priority="0"
 		mimetype=""
 		author="Nibaldo González (nibgonz@gmail.com)"
-		license="LGPL">
+		license="MIT">
 	
 	<highlighting>
 		
@@ -411,6 +411,7 @@
 			<item>path</item>
 			<item>interface</item>
 			<item>member</item>
+			<item>name</item>
 		</list>
 		<list name="rule_dbus_peer">
 			<item>name</item>
@@ -794,7 +795,6 @@
 				<DetectChar context="_parentheses_block_dbus" attribute="Normal Text" char="(" beginRegion="Parentheses Block"/>
 
 				<keyword context="#stay" attribute="Option" String="rule_dbus_options"/>
-				<keyword context="#stay" attribute="Other Option" String="rule_dbus_peer"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_dbus_access"/>
 				<keyword context="#stay" attribute="Other Data" String="rule_dbus_bus"/>
 			</context>
