@@ -684,6 +684,7 @@
 			<context name="_common_rules" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_common"/>
 				<IncludeRules context="_pcre_escape_str"/>
+				<!-- Highlight as path the text after the operator '=' (except for simple words) -->
 				<RegExpr context="_path_content" attribute="Operator 1" String="\=\s*(?=[^\s\(]*[\*\?\\@\[\{/\.])" insensitive="true"/>
 				<IncludeRules context="_operators"/>
 				<IncludeRules context="_path"/>
