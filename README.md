@@ -24,7 +24,7 @@ However, these XML files can also be stored in:
 
 	/usr/share/katepart5/syntax/
 	/home/<user>/.local/share/katepart5/syntax/
-	/usr/share/kde4/apps/katepart/syntax/
+	/usr/share/kde4/apps/katepart/syntax/  [old]
 
 For more details on the syntax highlighting, visit:
 * Documentation: https://docs.kde.org/stable5/en/applications/katepart/highlight.html
@@ -35,5 +35,6 @@ For more details on the syntax highlighting, visit:
 Copy the `apparmor.xml` file to: `/usr/share/katepart5/syntax/` or `~/.local/share/katepart5/syntax/`.
 
 E.g.:
+
 	`sudo cp ./apparmor.xml /usr/share/katepart5/syntax/`
 	`cp ./apparmor.xml ~/.local/share/katepart5/syntax/`
