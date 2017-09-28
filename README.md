@@ -36,5 +36,8 @@ Copy the `apparmor.xml` file to: `/usr/share/katepart5/syntax/` or `~/.local/sha
 
 E.g.:
 
-	`sudo cp ./apparmor.xml /usr/share/katepart5/syntax/`
-	`cp ./apparmor.xml ~/.local/share/katepart5/syntax/`
+`sudo cp ./apparmor.xml /usr/share/katepart5/syntax/`
+
+or
+
+`cp ./apparmor.xml ~/.local/share/katepart5/syntax/`
