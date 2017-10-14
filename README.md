@@ -4,7 +4,7 @@
 
 **Last Change:** September 2017
 
-*This file is part of the KDE's Kate project.*
+*This file is part of the KDE's Kate project. Included in KDE Frameworks 5.39.0 and higher.*
 
 ## Description:
 
@@ -36,8 +36,5 @@ Copy the `apparmor.xml` file to: `/usr/share/katepart5/syntax/` or `~/.local/sha
 
 E.g.:
 
-`sudo cp ./apparmor.xml /usr/share/katepart5/syntax/`
-
-or
-
-`cp ./apparmor.xml ~/.local/share/katepart5/syntax/`
+	sudo cp ./apparmor.xml /usr/share/katepart5/syntax/
+	cp ./apparmor.xml ~/.local/share/katepart5/syntax/
