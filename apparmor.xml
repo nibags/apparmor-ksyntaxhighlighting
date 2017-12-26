@@ -31,12 +31,15 @@
   ==========================================================================================
   
   Last update:
-	Syntax highlighting based in AppArmor 2.11
+	Syntax highlighting based in AppArmor 2.12
 	For more details about the syntax of AppArmor profiles, visit:
-		http://manpages.ubuntu.com/manpages/zesty/man5/apparmor.d.5.html
-		http://wiki.apparmor.net/index.php/Documentation
+		http://manpages.ubuntu.com/manpages/artful/en/man5/apparmor.d.5.html
+		https://gitlab.com/apparmor/apparmor/wikis/Documentation
   
   Change log:
+	* Version 4 BETA [26-Dec-2017, by Nibaldo González]:
+		- TODO: Revised profile syntax for AppArmor 2.12.
+		- New keywords for abstractions and network rules.
 	* Version 3 [24-Sep-2017, by Nibaldo González]:
 		- Update highlighting in DBus rules.
 	* Version 2 [29-Aug-2017, by Nibaldo González]:
@@ -50,10 +53,10 @@
 -->
 
 <language name="AppArmor Security Profile"
-		version="3"
+		version="4"
 		kateversion="5.0"
 		section="Markup"
-		extensions="usr.bin.*;usr.sbin.*;bin.*;sbin.*;usr.lib.*;usr.lib64.*;usr.libexec*;usr.local.bin.*;usr.local.sbin.*;usr.local.lib*;opt.*;etc.cron.*"
+		extensions="usr.bin.*;usr.sbin.*;bin.*;sbin.*;usr.lib.*;usr.lib64.*;usr.lib32.;usr.libexec.*;usr.local.bin.*;usr.local.sbin.*;usr.local.lib*;opt.*;etc.cron.*"
 		priority="0"
 		mimetype=""
 		author="Nibaldo González (nibgonz@gmail.com)"
@@ -201,6 +204,7 @@
 			<item>vsock</item>
 			<item>mpls</item>
 			<item>ib</item>
+			<item>kcm</item>
 
 			<!-- Type.
 				 Also: packet -->
@@ -442,10 +446,13 @@
 			<item>receive</item>
 			<item>bind</item>
 			<item>eavesdrop</item>
+			<item>read</item>
+			<item>write</item>
 		</list>
 		<list name="rule_dbus_bus">
 			<item>system</item>
 			<item>session</item>
+			<!-- accessibility? -->
 		</list>
 		
 		<!-- Unix Rule -->
@@ -513,6 +520,126 @@
 			<item>r</item>
 			<item>w</item>
 		</list>
+		
+		<list name="common_abstractions">
+			<item>abstractions/</item>
+			<item>apache2-common</item>
+			<item>aspell</item>
+			<item>audio</item>
+			<item>authentication</item>
+			<item>base</item>
+			<item>bash</item>
+			<item>consoles</item>
+			<item>cups-client</item>
+			<item>dbus</item>
+			<item>dbus-accessibility</item>
+			<item>dbus-accessibility-strict</item>
+			<item>dbus-session</item>
+			<item>dbus-session-strict</item>
+			<item>dbus-strict</item>
+			<item>dconf</item>
+			<item>dovecot-common</item>
+			<item>enchant</item>
+			<item>fcitx</item>
+			<item>fcitx-strict</item>
+			<item>fonts</item>
+			<item>freedesktop.org</item>
+			<item>gnome</item>
+			<item>gnupg</item>
+			<item>ibus</item>
+			<item>kde</item>
+			<item>kerberosclient</item>
+			<item>launchpad-integration</item>
+			<item>ldapclient</item>
+			<item>libpam-systemd</item>
+			<item>likewise</item>
+			<item>mdns</item>
+			<item>mir</item>
+			<item>mozc</item>
+			<item>mysql</item>
+			<item>nameservice</item>
+			<item>nis</item>
+			<item>nvidia</item>
+			<item>openssl</item>
+			<item>orbit2</item>
+			<item>p11-kit</item>
+			<item>perl</item>
+			<item>php</item>
+			<item>php5</item>
+			<item>postfix-common</item>
+			<item>private-files</item>
+			<item>private-files-strict</item>
+			<item>python</item>
+			<item>ruby</item>
+			<item>samba</item>
+			<item>smbpass</item>
+			<item>ssl_certs</item>
+			<item>ssl_keys</item>
+			<item>svn-repositories</item>
+			<item>ubuntu-bittorrent-clients</item>
+			<item>ubuntu-browsers</item>
+			<item>ubuntu-console-browsers</item>
+			<item>ubuntu-console-email</item>
+			<item>ubuntu-email</item>
+			<item>ubuntu-feed-readers</item>
+			<item>ubuntu-gnome-terminal</item>
+			<item>ubuntu-helpers</item>
+			<item>ubuntu-konsole</item>
+			<item>ubuntu-media-players</item>
+			<item>ubuntu-unity7-base</item>
+			<item>ubuntu-unity7-launcher</item>
+			<item>ubuntu-unity7-messaging</item>
+			<item>ubuntu-xterm</item>
+			<item>user-download</item>
+			<item>user-mail</item>
+			<item>user-manpages</item>
+			<item>user-tmp</item>
+			<item>user-write</item>
+			<item>video</item>
+			<item>wayland</item>
+			<item>web-data</item>
+			<item>winbind</item>
+			<item>wutmp</item>
+			<item>X</item>
+			<item>xad</item>
+			<item>xdg-desktop</item>
+
+			<item>ubuntu-browsers.d/</item>
+			<item>java</item>
+			<item>mailto</item>
+			<item>multimedia</item>
+			<item>plugins-common</item>
+			<item>productivity</item>
+			<item>text-editors</item>
+			<item>ubuntu-integration</item>
+			<item>ubuntu-integration-xul</item>
+			<item>user-files</item>
+
+			<item>apparmor_api/</item>
+			<item>change_profile</item>
+			<item>examine</item>
+			<item>find_mountpoint</item>
+			<item>introspect</item>
+			<item>is_enabled</item>
+
+			<item>tunables/</item>
+			<item>alias</item>
+			<item>apparmorfs</item>
+			<item>dovecot</item>
+			<item>global</item>
+			<item>home</item>
+			<item>kernelvars</item>
+			<item>multiarch</item>
+			<item>ntpd</item>
+			<item>proc</item>
+			<item>securityfs</item>
+			<item>sys</item>
+			<item>xdg-user-dirs</item>
+			<item>home.d/</item>
+			<item>multiarch.d/</item>
+			<item>xdg-user-dirs.d/</item>
+			<item>site.local</item>
+		</list>
 
 		<list name="other_words">
 			<item>none</item>
@@ -535,6 +662,7 @@
 				<DetectChar context="_comment" attribute="Comment" char="#"/>
 				<Detect2Chars context="_variable_declaration" attribute="Variable" char="@" char1="{" lookAhead="true" firstNonSpace="true"/>
 				<Detect2Chars context="_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
+				<RegExpr context="_variable_declaration_without_brackets" attribute="Variable" String="@[A-Za-z_]" lookAhead="true" firstNonSpace="true" insensitive="true"/>
 				
 				<IncludeRules context="_brackets_error"/>
 				<DetectChar context="#stay" attribute="Normal Text" char="{" beginRegion="Profile"/>
@@ -615,38 +743,65 @@
 			<!-- Include -->
 			<context name="_include" attribute="Preprocessor" lineEndContext="#pop">
 				<LineContinue context="#stay" attribute="Prep. Lib"/>
-				<RangeDetect context="#stay" attribute="Prep. Lib" char="&quot;" char1="&quot;"/>
-				<RegExpr context="#stay" attribute="Prep. Lib" String="&lt;[^\s&gt;]*&gt;"/>
+				<RegExpr context="_include_preplib1" attribute="Prep. Lib" String="&lt;(?=[^\s&gt;])" beginRegion="Prep. Lib"/>
+				<RegExpr context="_include_preplib2" attribute="Prep. Lib" String="&quot;(?=[^&quot;])" beginRegion="Prep. Lib"/>
+				<StringDetect context="#stay" attribute="Error" String="&lt;&gt;"/>
+				<StringDetect context="#stay" attribute="Error" String="&quot;&quot;"/>
 				<RegExpr context="#stay" attribute="Prep. Lib" String="/\S*(?=(\s|$))"/>
-				
+
 				<StringDetect context="#stay" attribute="Error" String="#include" insensitive="true"/>
 				<WordDetect context="#stay" attribute="Error" String="include" insensitive="true"/>
-				<RegExpr context="_include_error" attribute="Error" String="[^\s/#&lt;&quot;]" lookAhead="true"/>
+				<RegExpr context="#stay" attribute="Error" String="[^\s/#&lt;&quot;]+"/>
 				<DetectChar context="#pop!_comment" attribute="Comment" char="#"/>
 			</context>
 			<context name="_include_error" attribute="Error" lineEndContext="#pop">
 				<RegExpr context="#pop" attribute="Error" String="[\s/#&lt;&quot;]" lookAhead="true"/>
 			</context>
+			<context name="_include_preplib1" attribute="Prep. Lib" lineEndContext="#pop">
+				<keyword context="#stay" attribute="Prep. Lib" String="common_abstractions"/>
+				<DetectChar context="#pop" attribute="Prep. Lib" char="&gt;" endRegion="Prep. Lib"/>
+				<RegExpr context="#pop" attribute="Normal Text" String="\s" lookAhead="true"/>
+				<RegExpr context="#pop" attribute="Error" String="&lt;"/>
+			</context>
+			<context name="_include_preplib2" attribute="Prep. Lib" lineEndContext="#pop">
+				<keyword context="#stay" attribute="Prep. Lib" String="common_abstractions"/>
+				<DetectChar context="#pop" attribute="Prep. Lib" char="&quot;" endRegion="Prep. Lib"/>
+			</context>
 			
 			<!-- Variables -->
 			<context name="_variable" attribute="Variable" lineEndContext="#pop">
+				<StringDetect context="#pop" attribute="Variable" String="@{profile_name}"/>
+
 				<RegExpr context="#pop" attribute="Error" String="@(?=\{[^a-zA-Z_])" insensitive="true"/>
 				<RegExpr context="#pop" attribute="Error" String="@(?=\{&varname;[^\w\}])" insensitive="true"/>
 				<RegExpr context="#pop" attribute="Error" String="@(?=\{[^\}]*$)" insensitive="true"/>
+				<RegExpr context="#pop" attribute="Error" String="\s" lookAhead="true" insensitive="true"/>
 
 				<RegExpr context="#pop!_path_content" attribute="Variable" String="\}(?=[&pathchar;\[\{\(])" insensitive="true"/>
 				<RegExpr context="#pop!_path_content" attribute="Variable" String="\}(?=#[^&nopathchar;/\(\{\}\[\]]*[/\[\{\(])" insensitive="true"/>
 				<DetectChar context="#pop" attribute="Variable" char="}"/>
 			</context>
 			<context name="_variable_simple" attribute="Normal Text" lineEndContext="#stay">
+				<StringDetect context="#stay" attribute="Variable" String="@{profile_name}"/>
 				<RegExpr context="#stay" attribute="Variable" String="@\{&varname;\}" insensitive="true"/>
 			</context>
 
+			<!-- @{VARIABLE} =  A B C
+			     @{VARIABLE} += D E F -->
 			<context name="_variable_declaration" attribute="Variable" lineEndContext="#pop">
 				<RegExpr context="#pop!_variable_declaration_op" attribute="Variable" String="\}(?=\s*\+?\=.*[^,\s]\s*$)" insensitive="true"/> <!-- = or += -->
 				<IncludeRules context="_variable"/>
 			</context>
-			<context name="_variable_declaration_op" attribute="Operator 1" lineEndContext="#pop">
+			<!-- @variable = A B C -->
+			<context name="_variable_declaration_without_brackets" attribute="Variable" lineEndContext="#pop">
+				<RegExpr context="#pop!_variable_declaration_op" attribute="Normal Text" String="\s*\+?\=.*[^,\s]\s*$" lookAhead="true" insensitive="true"/> <!-- = or += -->
+				
+				<RegExpr context="#pop" attribute="Error" String="@(?=&varname;[^\w\+\=\s$])" insensitive="true"/>
+				<RegExpr context="#pop" attribute="Normal Text" String="\s" lookAhead="true" insensitive="true"/>
+				<DetectChar context="#pop" attribute="Normal Text" char="+" lookAhead="true"/>
+				<DetectChar context="#pop" attribute="Normal Text" char="=" lookAhead="true"/>
+			</context>
+			<context name="_variable_declaration_op" attribute="Operator 1" lineEndContext="#pop"> <!-- Operator -->
 				<DetectChar context="#pop!_variable_declaration_cont" attribute="Operator 1" char="="/>
 			</context>
 			<context name="_variable_declaration_cont" attribute="Path" lineEndContext="#pop">
@@ -816,14 +971,16 @@
 				<DetectChar context="_parentheses_block_dbus" attribute="Normal Text" char="(" beginRegion="Parentheses Block"/>
 
 				<keyword context="#stay" attribute="Option" String="rule_dbus_options"/>
-				<keyword context="#stay" attribute="Permissions" String="rule_dbus_access"/>
 				<keyword context="#stay" attribute="Other Data" String="rule_dbus_bus"/>
+				<keyword context="#stay" attribute="Permissions" String="rule_dbus_access"/>
+				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
 			</context>
 			<context name="_parentheses_block_dbus" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_default_parentheses_block"/>
-				<keyword context="#stay" attribute="Permissions" String="rule_dbus_access"/>
 				<keyword context="#stay" attribute="Other Option" String="rule_dbus_peer"/>
 				<keyword context="#stay" attribute="Other Data" String="rule_dbus_bus"/>
+				<keyword context="#stay" attribute="Permissions" String="rule_dbus_access"/>
+				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
 			</context>
 
 			<!-- Unix Rule -->

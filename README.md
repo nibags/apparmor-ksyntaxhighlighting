@@ -2,7 +2,7 @@
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>) (Valparaíso, Chile)
 
-**Last Change:** September 2017
+**Last Change:** December 2017
 
 ```
 This file is part of the KSyntaxHighlighting Framework of KDE. 
@@ -18,6 +18,8 @@ The file `apparmor.xml` contains the definition of the syntax highlighting.
 If you want to test the highlighting, you can find a sample AppArmor profile 
 in the `test` folder.
 
+**NOTE:** KDE Frameworks 5.39 includes version 3 of the file `apparmor.xml`. Version 4 is still in beta.
+
 ## About Syntax Highlighting Files of KSyntaxHighlighting:
 
 Syntax highlighting definition files consist of XML files 
@@ -27,8 +29,6 @@ However, these XML files can also be stored in:
 
 	$HOME/.local/share/org.kde.syntax-highlighting/syntax/
 	/usr/share/org.kde.syntax-highlighting/syntax/
-	$HOME/.local/share/katepart5/syntax/   [old]
-	/usr/share/katepart5/syntax/           [old]
 
 For more details of KSyntaxHighlighting Framework, visit:
 * Official Repository: https://phabricator.kde.org/source/syntax-highlighting/
@@ -38,9 +38,16 @@ For more details of KSyntaxHighlighting Framework, visit:
 
 ## Installation:
 
-Copy the `apparmor.xml` file to: `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` or `/usr/share/org.kde.syntax-highlighting/syntax/`.
+Copy the file `apparmor.xml` to:
+* For local user: `$HOME/.local/share/org.kde.syntax-highlighting/syntax/`
+```
+mkdir -p $HOME/.local/share/org.kde.syntax-highlighting/syntax/
+cp ./apparmor.xml $HOME/.local/share/org.kde.syntax-highlighting/syntax/
+```
+* For all users: `/usr/share/org.kde.syntax-highlighting/syntax/`
+```
+sudo mkdir -p /usr/share/org.kde.syntax-highlighting/syntax/
+sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
+```
 
-E.g.:
-
-	cp ./apparmor.xml $HOME/.local/share/org.kde.syntax-highlighting/syntax/
-	sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
+Version 3 of this file comes installed by default in KDE Frameworks 5.39.
