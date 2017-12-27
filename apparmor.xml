@@ -39,8 +39,8 @@
   Change log:
 	* Version 4 [27-Dec-2017, by Nibaldo González]:
 		- Profile syntax updated for AppArmor 2.12. Add network rule 'smc' & 'kcm' keywords.
+		- Add keywords for default abstractions, special variables and missing mount flags.
 		- Improvements in the highlighting of Include rules. 
-		- Add keywords for default abstractions and special variables.
 	* Version 3 [24-Sep-2017, by Nibaldo González]:
 		- Fix incorrect highlighting of the DBus rule 'name' keyword.
 	* Version 2 [29-Aug-2017, by Nibaldo González]:
@@ -231,49 +231,62 @@
 			<item>fstype</item>
 			<item>vfstype</item>
 			<item>options</item>
+			<item>option</item>
 		</list>
 		<list name="rule_mount_flags">
-			<item>rw</item>
+			<!-- Also: r, w, rw -->
 			<item>ro</item>
-			<item>bind</item>
-			<item>remount</item>
-			<item>nosuid</item>
+			<item>read-only</item>
 			<item>suid</item>
-			<item>nodev</item>
+			<item>nosuid</item>
 			<item>dev</item>
-			<item>noexec</item>
+			<item>nodev</item>
 			<item>exec</item>
+			<item>noexec</item>
 			<item>sync</item>
 			<item>async</item>
+			<item>remount</item>
 			<item>mand</item>
 			<item>nomand</item>
 			<item>dirsync</item>
-			<item>noatime</item>
 			<item>atime</item>
-			<item>nodiratime</item>
+			<item>noatime</item>
 			<item>diratime</item>
-			<item>rbind</item>
+			<item>nodiratime</item>
+			<item>bind</item>
+			<item>B</item>
 			<item>move</item>
+			<item>M</item>
+			<item>rbind</item>
+			<item>R</item>
 			<item>verbose</item>
 			<item>silent</item>
 			<item>loud</item>
 			<item>acl</item>
 			<item>noacl</item>
 			<item>unbindable</item>
+			<item>make-unbindable</item>
 			<item>runbindable</item>
+			<item>make-runbindable</item>
 			<item>private</item>
+			<item>make-private</item>
 			<item>rprivate</item>
+			<item>make-rprivate</item>
 			<item>slave</item>
+			<item>make-slave</item>
 			<item>rslave</item>
+			<item>make-rslave</item>
 			<item>shared</item>
+			<item>make-shared</item>
 			<item>rshared</item>
+			<item>make-rshared</item>
 			<item>relatime</item>
 			<item>norelatime</item>
 			<item>iversion</item>
 			<item>noiversion</item>
 			<item>strictatime</item>
-			<item>nouser</item>
 			<item>user</item>
+			<item>nouser</item>
 		</list>
 		<list name="rule_mount_fstypes">
 			<!-- VFS Types -->
@@ -453,7 +466,6 @@
 		<list name="rule_dbus_bus">
 			<item>system</item>
 			<item>session</item>
-			<!-- accessibility? -->
 		</list>
 		
 		<!-- Unix Rule -->
@@ -652,6 +664,7 @@
 			<item>none</item>
 			<item>unconfined</item>
 		</list>
+		<!--  Keywords not yet included: if, else, not, defined, other, rewrite -->
 
 		<contexts>
 			
