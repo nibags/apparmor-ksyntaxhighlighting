@@ -38,13 +38,14 @@ For more details of KSyntaxHighlighting Framework, visit:
 
 ## Installation:
 
-Copy the file `apparmor.xml` to:
-* For local user: `$HOME/.local/share/org.kde.syntax-highlighting/syntax/`
+Copy the file `apparmor.xml` to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` (for local user) or `/usr/share/org.kde.syntax-highlighting/syntax/` (for all users).
+
+Ex.:
 ```
 mkdir -p $HOME/.local/share/org.kde.syntax-highlighting/syntax/
 cp ./apparmor.xml $HOME/.local/share/org.kde.syntax-highlighting/syntax/
 ```
-* For all users: `/usr/share/org.kde.syntax-highlighting/syntax/`
+
 ```
 sudo mkdir -p /usr/share/org.kde.syntax-highlighting/syntax/
 sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/

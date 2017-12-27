@@ -37,9 +37,12 @@
 		https://gitlab.com/apparmor/apparmor/wikis/Documentation
   
   Change log:
-	* Version 4 BETA [26-Dec-2017, by Nibaldo González]:
+	* Version 4 BETA [27-Dec-2017, by Nibaldo González]:
 		- TODO: Revised profile syntax for AppArmor 2.12.
-		- New keywords for abstractions and network rules.
+		- Improvements and new keywords for abstractions, variables and network rules.
+		- Bug fix: The priority of this file changes from 0 to -1. This prevents the 
+		  AppArmor highlight from being prioritized over another language, when the 
+		  XML file from the other language does not have a defined priority.
 	* Version 3 [24-Sep-2017, by Nibaldo González]:
 		- Update highlighting in DBus rules.
 	* Version 2 [29-Aug-2017, by Nibaldo González]:
@@ -57,7 +60,7 @@
 		kateversion="5.0"
 		section="Markup"
 		extensions="usr.bin.*;usr.sbin.*;bin.*;sbin.*;usr.lib.*;usr.lib64.*;usr.lib32.;usr.libexec.*;usr.local.bin.*;usr.local.sbin.*;usr.local.lib*;opt.*;etc.cron.*"
-		priority="0"
+		priority="-1"
 		mimetype=""
 		author="Nibaldo González (nibgonz@gmail.com)"
 		license="MIT">
@@ -513,14 +516,9 @@
 			<item>safe</item>
 			<item>unsafe</item>
 		</list>
-
-		<!-- Other Keywords -->
-		<list name="common_accesses">
-			<item>rw</item>
-			<item>r</item>
-			<item>w</item>
-		</list>
 		
+		<!-- Abstractions by default in AppArmor,
+			 included in most Linux distributions. -->
 		<list name="common_abstractions">
 			<item>abstractions/</item>
 			<item>apache2-common</item>
@@ -641,6 +639,17 @@
 			<item>site.local</item>
 		</list>
 
+		<!-- Other Keywords -->
+		<list name="special_variables">
+			<item>profile_name</item>
+		</list>
+
+		<list name="common_accesses">
+			<item>rw</item>
+			<item>r</item>
+			<item>w</item>
+		</list>
+
 		<list name="other_words">
 			<item>none</item>
 			<item>unconfined</item>
@@ -662,8 +671,9 @@
 				<DetectChar context="_comment" attribute="Comment" char="#"/>
 				<Detect2Chars context="_variable_declaration" attribute="Variable" char="@" char1="{" lookAhead="true" firstNonSpace="true"/>
 				<Detect2Chars context="_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
-				<RegExpr context="_variable_declaration_without_brackets" attribute="Variable" String="@[A-Za-z_]" lookAhead="true" firstNonSpace="true" insensitive="true"/>
-				
+				<RegExpr context="_variable_declaration_without_brackets" attribute="Variable" String="@[A-Za-z_]" lookAhead="true" firstNonSpace="true"/>
+				<keyword context="#stay" attribute="Normal Text" String="special_variables"/>
+
 				<IncludeRules context="_brackets_error"/>
 				<DetectChar context="#stay" attribute="Normal Text" char="{" beginRegion="Profile"/>
 				<DetectChar context="#stay" attribute="Normal Text" char="}" endRegion="Profile"/>
@@ -743,35 +753,32 @@
 			<!-- Include -->
 			<context name="_include" attribute="Preprocessor" lineEndContext="#pop">
 				<LineContinue context="#stay" attribute="Prep. Lib"/>
-				<RegExpr context="_include_preplib1" attribute="Prep. Lib" String="&lt;(?=[^\s&gt;])" beginRegion="Prep. Lib"/>
-				<RegExpr context="_include_preplib2" attribute="Prep. Lib" String="&quot;(?=[^&quot;])" beginRegion="Prep. Lib"/>
-				<StringDetect context="#stay" attribute="Error" String="&lt;&gt;"/>
-				<StringDetect context="#stay" attribute="Error" String="&quot;&quot;"/>
+				<RegExpr context="_include_preplib_t" attribute="Prep. Lib" String="&lt;(?=[^\s&lt;&gt;])" beginRegion="Prep. Lib"/>
+				<RegExpr context="_include_preplib_q" attribute="Prep. Lib" String="&quot;(?=[^&quot;])" beginRegion="Prep. Lib"/>
 				<RegExpr context="#stay" attribute="Prep. Lib" String="/\S*(?=(\s|$))"/>
 
+				<StringDetect context="#stay" attribute="Error" String="&lt;&gt;"/>
+				<StringDetect context="#stay" attribute="Error" String="&quot;&quot;"/>
 				<StringDetect context="#stay" attribute="Error" String="#include" insensitive="true"/>
 				<WordDetect context="#stay" attribute="Error" String="include" insensitive="true"/>
 				<RegExpr context="#stay" attribute="Error" String="[^\s/#&lt;&quot;]+"/>
 				<DetectChar context="#pop!_comment" attribute="Comment" char="#"/>
 			</context>
-			<context name="_include_error" attribute="Error" lineEndContext="#pop">
-				<RegExpr context="#pop" attribute="Error" String="[\s/#&lt;&quot;]" lookAhead="true"/>
-			</context>
-			<context name="_include_preplib1" attribute="Prep. Lib" lineEndContext="#pop">
+			<context name="_include_preplib_t" attribute="Prep. Lib" lineEndContext="#pop">
 				<keyword context="#stay" attribute="Prep. Lib" String="common_abstractions"/>
 				<DetectChar context="#pop" attribute="Prep. Lib" char="&gt;" endRegion="Prep. Lib"/>
+				<RegExpr context="#pop" attribute="Prep. Lib Open" String="[^&lt;&gt;\s](?=($|\s))" insensitive="true"/>
 				<RegExpr context="#pop" attribute="Normal Text" String="\s" lookAhead="true"/>
 				<RegExpr context="#pop" attribute="Error" String="&lt;"/>
 			</context>
-			<context name="_include_preplib2" attribute="Prep. Lib" lineEndContext="#pop">
+			<context name="_include_preplib_q" attribute="Prep. Lib" lineEndContext="#pop">
 				<keyword context="#stay" attribute="Prep. Lib" String="common_abstractions"/>
 				<DetectChar context="#pop" attribute="Prep. Lib" char="&quot;" endRegion="Prep. Lib"/>
+				<RegExpr context="#pop" attribute="Prep. Lib Open" String="[^&quot;](?=$)" insensitive="true"/>
 			</context>
 			
 			<!-- Variables -->
 			<context name="_variable" attribute="Variable" lineEndContext="#pop">
-				<StringDetect context="#pop" attribute="Variable" String="@{profile_name}"/>
-
 				<RegExpr context="#pop" attribute="Error" String="@(?=\{[^a-zA-Z_])" insensitive="true"/>
 				<RegExpr context="#pop" attribute="Error" String="@(?=\{&varname;[^\w\}])" insensitive="true"/>
 				<RegExpr context="#pop" attribute="Error" String="@(?=\{[^\}]*$)" insensitive="true"/>
@@ -1216,6 +1223,7 @@
 				<RegExpr context="#stay" attribute="Globbing Brackets Open" String="[^\s\[\]\{\}\(\)](?=([&nopathchar;]|$))"/>
 				<IncludeRules context="_path_globbing_chars"/>
 				<DetectChar context="#stay" attribute="Globbing Char 2" char=","/>
+				<keyword context="#stay" attribute="Globbing Brackets" String="special_variables"/>
 			</context>
 			<context name="_square_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
 				<IncludeRules context="_pcre_escape_str"/>
@@ -1290,6 +1298,7 @@
 			<itemData name="Comment" defStyleNum="dsComment"/>
 			<itemData name="Preprocessor" defStyleNum="dsPreprocessor" spellChecking="false"/>
 			<itemData name="Prep. Lib" defStyleNum="dsImport" spellChecking="false"/>
+			<itemData name="Prep. Lib Open" defStyleNum="dsImport" bold="0" italic="0" underline="1" spellChecking="false"/>
 			<itemData name="Variable" defStyleNum="dsDecVal" bold="0" italic="0" underline="0" spellChecking="false"/>
 			
 			<itemData name="Profile Head" defStyleNum="dsFunction" bold="1" italic="0" underline="0" spellChecking="false"/>
