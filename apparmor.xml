@@ -40,9 +40,6 @@
 	* Version 4 BETA [27-Dec-2017, by Nibaldo González]:
 		- TODO: Revised profile syntax for AppArmor 2.12.
 		- Improvements and new keywords for abstractions, variables and network rules.
-		- Bug fix: The priority of this file changes from 0 to -1. This prevents the 
-		  AppArmor highlight from being prioritized over another language, when the 
-		  XML file from the other language does not have a defined priority.
 	* Version 3 [24-Sep-2017, by Nibaldo González]:
 		- Update highlighting in DBus rules.
 	* Version 2 [29-Aug-2017, by Nibaldo González]:
@@ -60,7 +57,7 @@
 		kateversion="5.0"
 		section="Markup"
 		extensions="usr.bin.*;usr.sbin.*;bin.*;sbin.*;usr.lib.*;usr.lib64.*;usr.lib32.;usr.libexec.*;usr.local.bin.*;usr.local.sbin.*;usr.local.lib*;opt.*;etc.cron.*"
-		priority="-1"
+		priority="0"
 		mimetype=""
 		author="Nibaldo González (nibgonz@gmail.com)"
 		license="MIT">
