@@ -33,23 +33,23 @@
   Last update:
 	Syntax highlighting based in AppArmor 2.12
 	For more details about the syntax of AppArmor profiles, visit:
-		http://manpages.ubuntu.com/manpages/artful/en/man5/apparmor.d.5.html
 		https://gitlab.com/apparmor/apparmor/wikis/Documentation
+		http://manpages.ubuntu.com/manpages/artful/en/man5/apparmor.d.5.html
   
   Change log:
-	* Version 4 BETA [27-Dec-2017, by Nibaldo González]:
-		- TODO: Revised profile syntax for AppArmor 2.12.
-		- Improvements and new keywords for abstractions, variables and network rules.
+	* Version 4 [27-Dec-2017, by Nibaldo González]:
+		- Profile syntax updated for AppArmor 2.12. Add network rule 'smc' & 'kcm' keywords.
+		- Improvements in the highlighting of Include rules. 
+		- Add keywords for default abstractions and special variables.
 	* Version 3 [24-Sep-2017, by Nibaldo González]:
-		- Update highlighting in DBus rules.
+		- Fix incorrect highlighting of the DBus rule 'name' keyword.
 	* Version 2 [29-Aug-2017, by Nibaldo González]:
 		- Improvements in highlighting and bug fixes.
 		- Each rule has its own context.
 		- The profile name is highlighted in the profile header and profile transition rules.
 		- Improvements in the detection of file paths and file globbing syntax.
   	* Version 1 [22-Feb-2017, by Nibaldo González]:
-		- Initial version.
-		- Support for profile syntax of Apparmor 2.11.
+		- Initial version. Support for profile syntax of Apparmor 2.11.
 -->
 
 <language name="AppArmor Security Profile"
@@ -205,6 +205,7 @@
 			<item>mpls</item>
 			<item>ib</item>
 			<item>kcm</item>
+			<item>smc</item>
 
 			<!-- Type.
 				 Also: packet -->
