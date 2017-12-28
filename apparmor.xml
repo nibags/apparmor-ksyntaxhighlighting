@@ -533,7 +533,10 @@
 			<item>read</item>
 			<item>write</item>
 		</list>
-
+		
+		<!-- NOTE: The following keywords are not used for highlighting. The purpose   
+			 of these (both abstractions, and special variables) is to provide  
+			 autocomplete suggestions when writing Include rules and variables. -->
 		<list name="special_variables">
 			<item>profile_name</item>
 			<!-- Variables defined in the provided AppArmor policy.
@@ -542,8 +545,7 @@
 			<item>securityfs</item>
 			<item>apparmorfs</item>
 		</list>
-		
-		<!-- Abstractions by default, from the provided AppArmor policy -->
+		<!-- Abstractions by default, from the provided AppArmor policy. -->
 		<list name="common_abstractions">
 			<item>abstractions/</item>
 			<item>apache2-common</item>
