@@ -1,6 +1,6 @@
-# Example AppArmor Profile.
+# Sample AppArmor Profile.
 # License: Public Domain
-# Last change: August 29, 2017
+# Last change: December 28, 2017
 
 # NOTE: This profile is not fully functional, since
 # it is designed to test the syntax highlighting.
@@ -8,24 +8,23 @@
 include <tunables/global>
 
 # Declare an AppArmor variables to help with overrides
-@{FOO_LIB}=/usr/lib{,64,/*-linux-gnu}/foo
-@{USER_DIR}=@{HOME}/Public @{HOME}/Desktop
+@{FOO_LIB}=/usr/lib{,32,64}/foo
+@{USER_DIR} = @{HOME}/Public @{HOME}/Desktop
+@{USER_DIR} += @{HOME}/Hello
 
 # Profile for /usr/bin/foo
 /usr/bin/foo (attach_disconnected, enforce) {
 	include <abstractions/base>
 	include <abstractions/dbus>
 	include <abstractions/dbus-session>
-	include <abstractions/dbus-accessibility>
 	include <abstractions/fonts>
-	include <abstractions/X>
 	include <abstractions/kde>
 	include <abstractions/consoles>
 
 	#include <abstractions/ubuntu-helpers>
-	#include<abstractions/confidential-deny>
-	#include"/etc/apparmor.d/abstractions/open-browser"
-	include "/etc/apparmor.d/abstractions/open-email"
+	#include<abstractions/wayland>
+	#include"/etc/apparmor.d/abstractions/ubuntu-konsole"
+	include "/etc/apparmor.d/abstractions/openssl"
 
 	/{,**/} r,# Read only directories
 
@@ -36,16 +35,16 @@ include <tunables/global>
 	audit deny owner /**/**.py* r,
 
 	# Files supported
-	/**.[tT][xX][tT] r, # txt
-	/**.[wW][bB][mM][pP] r, # wbmp
-	/**.[wW][eE][bB][pP] r, # webp
+	/**.[tT][xX][tT]     r,  # txt
+	/**.[wW][bB][mM][pP] r,  # wbmp
+	/**.[wW][eE][bB][pP] r,  # webp
 
 	# Local configuration
 	owner file @{HOME}/.local/share/foo/{,**} rwk,
 	owner @{HOME}/.local/share/RecentDocuments/* rwk,
 	owner @{HOME}/.config/foo/{,**} rwk,	
-	owner @{HOME}/.config/foorc{,.lock} rwk,
-	owner @{HOME}/.config/.[a-zA-Z0-9]* rwk,
+	owner @{HOME}/.config/* rw,
+	owner @{HOME}/.config/*.[a-zA-Z0-9]* rwk,
 	owner @{HOME}/.cache/foo/{,**} rwk,
 
 	"/usr/share/**" r,
@@ -59,9 +58,9 @@ include <tunables/global>
 	/etc/passwd r,
 	/etc/xdg/{,**} r,
 	/etc/xdg/Trolltech.conf k,
-	deny /etc/xdg/{autostart,systemd}/{,**} rw,
+	deny /etc/xdg/{autostart,systemd}/{,**} r,
 	deny /boot/** rwlkmx,
-	@{PROC}/[0-9]*/{cmdline,mountinfo,mounts,stat,status,vmstat} r,
+	owner @{PROC}/@{pid}/{cmdline,mountinfo,mounts,stat,status,vmstat} r,
 	/sys/devices/**/uevent r,
 
 	# Libraries and binaries
@@ -70,18 +69,18 @@ include <tunables/global>
 	/usr/bin/khelpcenter Cxr -> sanitized_helper,
 	/usr/bin/helloworld Cxr -> hello_world,
 	/usr/bin/* Pixr,
-	/usr/lib{,64}/** Pixr,
-	/usr/lib{,64,/*-linux-gnu}/qt5/plugins/{,**/}*.so m,
+	/usr/lib{,32,64}/{,@{multiarch}/}** Pixr,
+	/usr/lib{,32,64}/{,@{multiarch}/}qt5/plugins/{,**/}*.so m,
 	@{FOO_LIB}/{,**} mr,
 
 	# Temporal files and sockets
-	owner /tmp/{*lock,kde-*/**} rwk,
-	owner /var/tmp/kdecache-*/* rwk,
+	owner /{,var/}tmp/kde-*/{,**} rwk,
+	owner /{,var/}tmp/kdecache-*/{,*} rwk,
 	owner /run/user/[0-9]*/{*-socket,bus,kdeinit5*,foo*} rwk,
 	owner /run/user/[0-9]*/ksocket-*/{,**} rwk,
 	/run/dbus/system_bus_socket w,
 
-	/dev/{ati,dri}/** rw,
+	/dev/{ati,dri}/{,**} rw,
 	audit deny /dev/{audio,video}* rwlkmx,
 
 	# Dbus rules
@@ -100,10 +99,13 @@ include <tunables/global>
 		bus=session
 		path=/org/gnome/GConf/Database/*
 		member={AddMatch,AddNotify,AllEntries,LookupExtended,RemoveNotify},
+	dbus (bind)
+		bus=system
+		name=org.bluez,
 
 	# Signal rules
 	signal (send) set=(term) peer=unconfined,
-	signal (send, receive) set=(int exists) peer=/usr/lib/hello/world//foo-helper,
+	signal (send, receive) set=(int exists rtmin+8) peer=/usr/lib/hello/world//foo-helper,
 
 	# Child profile
 	profile hello_world {
@@ -119,7 +121,7 @@ include <tunables/global>
 		link subset /link* -> /**,
 
 		# Network rules
-		network inet6 tcp,#Allow access to tcp only for inet6 addresses
+		network inet6 tcp, #Allow access to tcp only for inet6 addresses
 		network netlink dgram,
 		network bluetooth,
 
@@ -129,8 +131,9 @@ include <tunables/global>
 		capability sys_chroot,
 
 		# Mount rules
-		mount options=(rw bind remount nodev noexec) fstype=ecryptfs /home/*/.helloworld/ -> /home/*/helloworld/,
+		mount options=(rw bind remount nodev noexec) vfstype=ecryptfs /home/*/.helloworld/ -> /home/*/helloworld/,
 		mount options in (rw, bind) / -> /run/hellowordd/*.mnt,
+		mount option=read-only fstype=btrfs /dev/sd[a-z][1-9]* -> /media/*/*,
 		umount /home/*/helloworld/,
 
 		# Pivot Root rules
@@ -181,6 +184,8 @@ profile syntax_error /usr/bin/error flags=(complain audit) {
 	# Error: Include
 	include<filepath>
 	include <filepath >
+	include <filep
+	include hello<filepath>bye
 	#includefilepath
 	# include
 	file #include /hello r,

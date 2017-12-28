@@ -18,8 +18,6 @@ The file `apparmor.xml` contains the definition of the syntax highlighting.
 If you want to test the highlighting, you can find a sample AppArmor profile 
 in the `test` folder.
 
-**NOTE:** KDE Frameworks 5.39 includes version 3 of the file `apparmor.xml`. Version 4 has not yet been published, it is under review.
-
 ## About Syntax Highlighting Files of KSyntaxHighlighting:
 
 Syntax highlighting definition files consist of XML files 
@@ -51,4 +49,4 @@ sudo mkdir -p /usr/share/org.kde.syntax-highlighting/syntax/
 sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
 ```
 
-Version 3 of this file comes installed by default in KDE Frameworks 5.39.
+**NOTE:** KDE Frameworks 5.39 includes version 3 of the file `apparmor.xml`. Version 4 has not yet been published.

@@ -37,10 +37,10 @@
 		http://manpages.ubuntu.com/manpages/artful/en/man5/apparmor.d.5.html
   
   Change log:
-	* Version 4 [27-Dec-2017, by Nibaldo González]:
-		- Profile syntax updated for AppArmor 2.12. Add network rule 'smc' & 'kcm' keywords.
-		- Add keywords for default abstractions, special variables and missing mount flags.
-		- Improvements in the highlighting of Include rules. 
+	* Version 4 [28-Dec-2017, by Nibaldo González]:
+		- Profile syntax updated for AppArmor 2.12. Add keywords: network rule keywords, 
+		  default abstractions, special variables, mount flags/options & base permissions.
+		- Improvements in the highlighting of Include rules & variables. Some fixes.
 	* Version 3 [24-Sep-2017, by Nibaldo González]:
 		- Fix incorrect highlighting of the DBus rule 'name' keyword.
 	* Version 2 [29-Aug-2017, by Nibaldo González]:
@@ -56,7 +56,7 @@
 		version="4"
 		kateversion="5.0"
 		section="Markup"
-		extensions="usr.bin.*;usr.sbin.*;bin.*;sbin.*;usr.lib.*;usr.lib64.*;usr.lib32.;usr.libexec.*;usr.local.bin.*;usr.local.sbin.*;usr.local.lib*;opt.*;etc.cron.*"
+		extensions="usr.bin.*;usr.sbin.*;bin.*;sbin.*;usr.lib.*;usr.lib64.*;usr.lib32.*;usr.libx32.*;usr.libexec.*;usr.local.bin.*;usr.local.sbin.*;usr.local.lib*;opt.*;etc.cron.*"
 		priority="0"
 		mimetype=""
 		author="Nibaldo González (nibgonz@gmail.com)"
@@ -234,7 +234,9 @@
 			<item>option</item>
 		</list>
 		<list name="rule_mount_flags">
-			<!-- Also: r, w, rw -->
+			<item>r</item>
+			<item>w</item>
+			<item>rw</item>
 			<item>ro</item>
 			<item>read-only</item>
 			<item>suid</item>
@@ -386,8 +388,7 @@
 			<item>peer</item>
 		</list>
 		<list name="rule_ptrace_access">
-			<!-- Also: r, w, rw -->
-			<item>read</item>
+			<!-- Also: r, w, rw, read -->
 			<item>readby</item>
 			<item>trace</item>
 			<item>tracedby</item>
@@ -435,9 +436,7 @@
 			<item>exists</item>
 		</list>
 		<list name="rule_signal_access">
-			<!-- Also: r, w, rw -->
-			<item>read</item>
-			<item>write</item>
+			<!-- Also: r, w, rw, read, write -->
 			<item>send</item>
 			<item>receive</item>
 		</list>
@@ -456,12 +455,11 @@
 			<item>label</item>
 		</list>
 		<list name="rule_dbus_access">
+			<!-- Also: r, w, rw, read, write -->
 			<item>send</item>
 			<item>receive</item>
 			<item>bind</item>
 			<item>eavesdrop</item>
-			<item>read</item>
-			<item>write</item>
 		</list>
 		<list name="rule_dbus_bus">
 			<item>system</item>
@@ -480,7 +478,7 @@
 			<item>opt</item>
 		</list>
 		<list name="rule_unix_access">
-			<!-- Also: r, w, rw  -->
+			<!-- Also: r, w, rw, read, write -->
 			<item>send</item>
 			<item>receive</item>
 			<item>bind</item>
@@ -527,8 +525,25 @@
 			<item>unsafe</item>
 		</list>
 		
-		<!-- Abstractions by default in AppArmor,
-			 included in most Linux distributions. -->
+		<!-- Base Permissions -->
+		<list name="base_accesses">
+			<item>rw</item>
+			<item>r</item>
+			<item>w</item>
+			<item>read</item>
+			<item>write</item>
+		</list>
+
+		<list name="special_variables">
+			<item>profile_name</item>
+			<!-- Variables defined in the provided AppArmor policy.
+				 Also (not included): HOME, HOMEDIRS, PROC, XDG_*_DIR, pid, pids, tid, sys -->
+			<item>multiarch</item>
+			<item>securityfs</item>
+			<item>apparmorfs</item>
+		</list>
+		
+		<!-- Abstractions by default, from the provided AppArmor policy -->
 		<list name="common_abstractions">
 			<item>abstractions/</item>
 			<item>apache2-common</item>
@@ -647,17 +662,8 @@
 			<item>multiarch.d/</item>
 			<item>xdg-user-dirs.d/</item>
 			<item>site.local</item>
-		</list>
 
-		<!-- Other Keywords -->
-		<list name="special_variables">
-			<item>profile_name</item>
-		</list>
-
-		<list name="common_accesses">
-			<item>rw</item>
-			<item>r</item>
-			<item>w</item>
+			<item>local/</item>
 		</list>
 
 		<list name="other_words">
@@ -761,7 +767,7 @@
 				<IncludeRules context="##Modelines"/>
 			</context>
 
-			<!-- Include -->
+			<!-- Include Rule -->
 			<context name="_include" attribute="Preprocessor" lineEndContext="#pop">
 				<LineContinue context="#stay" attribute="Prep. Lib"/>
 				<RegExpr context="_include_preplib_t" attribute="Prep. Lib" String="&lt;(?=[^\s&lt;&gt;])" beginRegion="Prep. Lib"/>
@@ -779,6 +785,7 @@
 				<keyword context="#stay" attribute="Prep. Lib" String="common_abstractions"/>
 				<DetectChar context="#pop" attribute="Prep. Lib" char="&gt;" endRegion="Prep. Lib"/>
 				<RegExpr context="#pop" attribute="Prep. Lib Open" String="[^&lt;&gt;\s](?=($|\s))" insensitive="true"/>
+
 				<RegExpr context="#pop" attribute="Normal Text" String="\s" lookAhead="true"/>
 				<RegExpr context="#pop" attribute="Error" String="&lt;"/>
 			</context>
@@ -814,7 +821,7 @@
 			<context name="_variable_declaration_without_brackets" attribute="Variable" lineEndContext="#pop">
 				<RegExpr context="#pop!_variable_declaration_op" attribute="Normal Text" String="\s*\+?\=.*[^,\s]\s*$" lookAhead="true" insensitive="true"/> <!-- = or += -->
 				
-				<RegExpr context="#pop" attribute="Error" String="@(?=&varname;[^\w\+\=\s$])" insensitive="true"/>
+				<RegExpr context="#pop" attribute="Normal Text" String="@(?=&varname;[^\w\+\=\s$])" insensitive="true"/>
 				<RegExpr context="#pop" attribute="Normal Text" String="\s" lookAhead="true" insensitive="true"/>
 				<DetectChar context="#pop" attribute="Normal Text" char="+" lookAhead="true"/>
 				<DetectChar context="#pop" attribute="Normal Text" char="=" lookAhead="true"/>
@@ -920,13 +927,11 @@
 
 				<keyword context="#stay" attribute="Option" String="rule_mount_options"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_mount_flags"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
 				<keyword context="#stay" attribute="Flags" String="rule_mount_fstypes"/>
 			</context>
 			<context name="_parentheses_block_mount" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_parentheses_block"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_mount_flags"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
 				<keyword context="#stay" attribute="Flags" String="rule_mount_fstypes"/>
 				<IncludeRules context="_end_rule_irnc"/>
 				<IncludeRules context="_end_rule_except_network"/>
@@ -948,13 +953,13 @@
 
 				<keyword context="#stay" attribute="Option" String="rule_ptrace_options"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_ptrace_access"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
+				<keyword context="#stay" attribute="Permissions" String="base_accesses"/>
 			</context>
 			<context name="_parentheses_block_ptrace" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_default_parentheses_block"/>
 				<keyword context="#stay" attribute="Other Option" String="rule_ptrace_options"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_ptrace_access"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
+				<keyword context="#stay" attribute="Permissions" String="base_accesses"/>
 			</context>
 
 			<!-- Signal Rule -->
@@ -968,16 +973,16 @@
 				<keyword context="#stay" attribute="Option" String="rule_signal_options"/>
 				<keyword context="#stay" attribute="Flags" String="rule_signal"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_signal_access"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
-				<RegExpr context="#stay" attribute="Flags" String="(\b)rtmin\+(([0-2]?\d)|30|31|32)\b"/>
+				<keyword context="#stay" attribute="Permissions" String="base_accesses"/>
+				<RegExpr context="#stay" attribute="Flags" String="(\b)rtmin\+(0*)(([12]?\d)|30|31|32)\b"/>
 			</context>
 			<context name="_parentheses_block_signal" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_default_parentheses_block"/>
 				<keyword context="#stay" attribute="Flags" String="rule_signal"/>
-				<RegExpr context="#stay" attribute="Flags" String="(\b)rtmin\+(([0-2]?\d)|30|31|32)\b"/>
+				<RegExpr context="#stay" attribute="Flags" String="(\b)rtmin\+(0*)(([12]?\d)|30|31|32)\b"/>
 				<keyword context="#stay" attribute="Other Option" String="rule_signal_options"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_signal_access"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
+				<keyword context="#stay" attribute="Permissions" String="base_accesses"/>
 			</context>
 			
 			<!-- DBus Rule -->
@@ -991,14 +996,14 @@
 				<keyword context="#stay" attribute="Option" String="rule_dbus_options"/>
 				<keyword context="#stay" attribute="Other Data" String="rule_dbus_bus"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_dbus_access"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
+				<keyword context="#stay" attribute="Permissions" String="base_accesses"/>
 			</context>
 			<context name="_parentheses_block_dbus" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_default_parentheses_block"/>
 				<keyword context="#stay" attribute="Other Option" String="rule_dbus_peer"/>
 				<keyword context="#stay" attribute="Other Data" String="rule_dbus_bus"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_dbus_access"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
+				<keyword context="#stay" attribute="Permissions" String="base_accesses"/>
 			</context>
 
 			<!-- Unix Rule -->
@@ -1011,14 +1016,14 @@
 
 				<keyword context="#stay" attribute="Option" String="rule_unix_options"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_unix_access"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
+				<keyword context="#stay" attribute="Permissions" String="base_accesses"/>
 				<keyword context="#stay" attribute="Data" String="rule_network"/>
 				<DetectChar context="_path_content" attribute="Path" char="@" lookAhead="true"/> <!-- Socket -->
 			</context>
 			<context name="_parentheses_block_unix" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_default_parentheses_block"/>
-				<keyword context="#stay" attribute="Permissions" String="common_accesses"/>
 				<keyword context="#stay" attribute="Permissions" String="rule_unix_access"/>
+				<keyword context="#stay" attribute="Permissions" String="base_accesses"/>
 				<keyword context="#stay" attribute="Other Option" String="rule_unix_options"/>
 				<keyword context="#stay" attribute="Data" String="rule_network"/>
 				<DetectChar context="_parentheses_path_content" attribute="Path" char="@" lookAhead="true"/>
