@@ -809,7 +809,6 @@
 				<DetectChar context="#pop" attribute="Variable" char="}"/>
 			</context>
 			<context name="_variable_simple" attribute="Normal Text" lineEndContext="#stay">
-				<StringDetect context="#stay" attribute="Variable" String="@{profile_name}"/>
 				<RegExpr context="#stay" attribute="Variable" String="@\{&varname;\}" insensitive="true"/>
 			</context>
 
