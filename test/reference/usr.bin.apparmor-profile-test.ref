@@ -9,8 +9,8 @@
 <dsNormal></dsNormal><br/>
 <Comment># Declare an AppArmor variables to help with overrides</Comment><br/>
 <Variable>@{FOO_LIB}</Variable><Operator 1>=</Operator 1><Path>/usr/lib</Path><Globbing Brackets>{</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>32</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>64}</Globbing Brackets><Path>/foo</Path><br/>
-<Variable>@{USER_DIR}</Variable><Operator 1> =</Operator 1><Path> </Path><Variable>@{HOME}</Variable><Path>/Public </Path><Variable>@{HOME}</Variable><Path>/Desktop</Path><br/>
-<Variable>@{USER_DIR}</Variable><Operator 1> +=</Operator 1><Path> </Path><Variable>@{HOME}</Variable><Path>/Hello</Path><br/>
+<Variable>@{USER_DIR}</Variable><Operator 1> = </Operator 1><Variable>@{HOME}</Variable><Path>/Public </Path><Variable>@{HOME}</Variable><Path>/Desktop</Path><br/>
+<Variable>@{USER_DIR}</Variable><Operator 1> += </Operator 1><Variable>@{HOME}</Variable><Path>/Hello</Path><br/>
 <dsNormal></dsNormal><br/>
 <Comment># Profile for /usr/bin/foo</Comment><br/>
 <Path>/usr/bin/foo</Path><Normal Text> (</Normal Text><Flags>attach_disconnected</Flags><Normal Text>, </Normal Text><Flags>enforce</Flags><Normal Text>) {</Normal Text><br/>
@@ -112,10 +112,10 @@
 <Normal Text>		</Normal Text><Comment># File rules (three different ways)</Comment><br/>
 <Normal Text>		</Normal Text><Rule>file</Rule><Normal Text> </Normal Text><Path>/usr/lib</Path><Globbing Brackets>{</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>32</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>64}</Globbing Brackets><Path>/helloworld/</Path><Globbing Char 1>**</Globbing Char 1><Path>.so</Path><Permissions> mr</Permissions><End Rule Char>,</End Rule Char><br/>
 <Normal Text>		</Normal Text><Path>/usr/lib</Path><Globbing Brackets>{</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>32</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>64}</Globbing Brackets><Path>/helloworld/</Path><Globbing Char 1>**</Globbing Char 1><Permissions> r</Permissions><End Rule Char>,</End Rule Char><br/>
-<Permissions>		rk</Permissions><Normal Text> </Normal Text><Path>/usr/lib</Path><Globbing Brackets>{</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>32</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>64}</Globbing Brackets><Path>/helloworld/hello,file</Path><End Rule Char>,</End Rule Char><br/>
+<Normal Text>	</Normal Text><Permissions>	rk</Permissions><Normal Text> </Normal Text><Path>/usr/lib</Path><Globbing Brackets>{</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>32</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>64}</Globbing Brackets><Path>/helloworld/hello,file</Path><End Rule Char>,</End Rule Char><br/>
 <dsNormal></dsNormal><br/>
 <Normal Text>		</Normal Text><Comment># Link rules (two ways)</Comment><br/>
-<Permissions>		l</Permissions><Normal Text> </Normal Text><Path>/foo1</Path><Normal Text> </Normal Text><Operator 2>-></Operator 2><Normal Text> </Normal Text><Path>/bar</Path><End Rule Char>,</End Rule Char><br/>
+<Normal Text>	</Normal Text><Permissions>	l</Permissions><Normal Text> </Normal Text><Path>/foo1</Path><Normal Text> </Normal Text><Operator 2>-></Operator 2><Normal Text> </Normal Text><Path>/bar</Path><End Rule Char>,</End Rule Char><br/>
 <Normal Text>		</Normal Text><Rule>link</Rule><Normal Text> </Normal Text><Path>/foo2</Path><Normal Text> </Normal Text><Operator 2>-></Operator 2><Normal Text> bar</Normal Text><End Rule Char>,</End Rule Char><br/>
 <Normal Text>		</Normal Text><Rule>link</Rule><Normal Text> </Normal Text><Path>/foo3</Path><Operator 2> to</Operator 2><Normal Text> bar</Normal Text><End Rule Char>,</End Rule Char><br/>
 <Normal Text>		</Normal Text><Rule>link</Rule><Normal Text> </Normal Text><Data>subset</Data><Normal Text> </Normal Text><Path>/link</Path><Globbing Char 1>*</Globbing Char 1><Normal Text> </Normal Text><Operator 2>-></Operator 2><Normal Text> </Normal Text><Path>/</Path><Globbing Char 1>**</Globbing Char 1><End Rule Char>,</End Rule Char><br/>
@@ -188,11 +188,11 @@
 <Preprocessor>	include </Preprocessor><Error>hello</Error><Prep. Lib><filepath></Prep. Lib><Error>bye</Error><br/>
 <Normal Text>	</Normal Text><Preprocessor>#include</Preprocessor><Error>filepath</Error><br/>
 <Normal Text>	</Normal Text><Comment># include</Comment><br/>
-<Normal Text>	</Normal Text><Rule>file</Rule><Normal Text> </Normal Text><Error>#include</Error><Normal Text> </Normal Text><Path>/hello</Path><Permissions> r</Permissions><End Rule Char>,</End Rule Char><br/>
+<Normal Text>	</Normal Text><Rule>file</Rule><Normal Text> </Normal Text><Comment>#include /hello r,</Comment><br/>
 <dsNormal></dsNormal><br/>
 <Normal Text>	</Normal Text><Comment># Error: Variable open or with characters not allowed</Comment><br/>
-<Normal Text>	</Normal Text><Error>@</Error><Normal Text>{var</Normal Text><br/>
-<Normal Text>	</Normal Text><Error>@</Error><Normal Text>{sdf&s}</Normal Text><br/>
+<Normal Text>	</Normal Text><Error>@</Error><Globbing Brackets>{va</Globbing Brackets><Globbing Brackets Open>r</Globbing Brackets Open><br/>
+<Normal Text>	</Normal Text><Error>@</Error><Globbing Brackets>{sdf&s}</Globbing Brackets><br/>
 <dsNormal></dsNormal><br/>
 <Normal Text>	</Normal Text><Comment># Error: Open brackets</Comment><br/>
 <Normal Text>	</Normal Text><Path>/</Path><Globbing Brackets>{hello{ab</Globbing Brackets><Globbing Char 2>,</Globbing Char 2><Globbing Brackets>cd}worl</Globbing Brackets><Globbing Brackets Open>d</Globbing Brackets Open><Normal Text> </Normal Text><Permissions> kr</Permissions><End Rule Char>,</End Rule Char><br/>
@@ -202,7 +202,11 @@
 <dsNormal></dsNormal><br/>
 <Normal Text>	</Normal Text><Comment># Error: Empty brackets</Comment><br/>
 <Normal Text>	</Normal Text><Path>/hello</Path><Error>[]</Error><Path>hello</Path><Error>{}</Error><Path>hello</Path><Error>()</Error><Path>he</Path><Normal Text> </Normal Text><Permissions> kr</Permissions><End Rule Char>,</End Rule Char><br/>
-<dsNormal></dsNormal><br/>
+<Normal Text>	</Normal Text><br/>
+<Normal Text>	</Normal Text><Comment># Comment within rule</Comment><br/>
+<Normal Text>	</Normal Text><Rule>dbus</Rule><Normal Text> (</Normal Text><Permissions>send</Permissions><Normal Text>)         </Normal Text><Error>#</Error><Normal Text>No_comment</Normal Text><br/>
+<Normal Text>		</Normal Text><Option>name</Option><Operator 1>=</Operator 1><Path>org.hello</Path><End Rule Char>,</End Rule Char><Normal Text> </Normal Text><Comment>#Comment</Comment><br/>
+<Normal Text>	</Normal Text><br/>
 <Normal Text>	</Normal Text><Comment># Error: Open rule</Comment><br/>
 <Normal Text>	</Normal Text><Path>/home/</Path><Globbing Char 1>*</Globbing Char 1><Path>/file</Path><Permissions> rw</Permissions><br/>
 <Normal Text>	</Normal Text><Rule Error>capability</Rule Error><Normal Text> </Normal Text><Data>dac_override</Data><br/>

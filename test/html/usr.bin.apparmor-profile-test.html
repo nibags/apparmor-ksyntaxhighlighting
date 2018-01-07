@@ -118,10 +118,10 @@
 		<span style="color:#898887;"># File rules (three different ways)</span>
 		<span style="color:#0057ae;font-weight:bold;">file</span> /usr/lib<span style="color:#ff5500;">{</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">32</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">64}</span>/helloworld/<span style="color:#3daee9;">**</span>.so<span style="font-weight:bold;"> mr</span>,
 		/usr/lib<span style="color:#ff5500;">{</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">32</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">64}</span>/helloworld/<span style="color:#3daee9;">**</span><span style="font-weight:bold;"> r</span>,
-<span style="font-weight:bold;">		rk</span> /usr/lib<span style="color:#ff5500;">{</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">32</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">64}</span>/helloworld/hello,file,
+	<span style="font-weight:bold;">	rk</span> /usr/lib<span style="color:#ff5500;">{</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">32</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">64}</span>/helloworld/hello,file,
 
 		<span style="color:#898887;"># Link rules (two ways)</span>
-<span style="font-weight:bold;">		l</span> /foo1 <span style="color:#bf0303;font-weight:bold;">-&gt;</span> /bar,
+	<span style="font-weight:bold;">	l</span> /foo1 <span style="color:#bf0303;font-weight:bold;">-&gt;</span> /bar,
 		<span style="color:#0057ae;font-weight:bold;">link</span> /foo2 <span style="color:#bf0303;font-weight:bold;">-&gt;</span> bar,
 		<span style="color:#0057ae;font-weight:bold;">link</span> /foo3<span style="color:#bf0303;font-weight:bold;"> to</span> bar,
 		<span style="color:#0057ae;font-weight:bold;">link</span> <span style="color:#0057ae;">subset</span> /link<span style="color:#3daee9;">*</span> <span style="color:#bf0303;font-weight:bold;">-&gt;</span> /<span style="color:#3daee9;">**</span>,
@@ -194,11 +194,11 @@
 <span style="color:#006e28;">	include </span><span style="color:#bf0303;text-decoration:underline;">hello</span><span style="color:#ff5500;">&lt;filepath&gt;</span><span style="color:#bf0303;text-decoration:underline;">bye</span>
 	<span style="color:#006e28;">#include</span><span style="color:#bf0303;text-decoration:underline;">filepath</span>
 	<span style="color:#898887;"># include</span>
-	<span style="color:#0057ae;font-weight:bold;">file</span> <span style="color:#bf0303;text-decoration:underline;">#include</span> /hello<span style="font-weight:bold;"> r</span>,
+	<span style="color:#0057ae;font-weight:bold;">file</span> <span style="color:#898887;">#include /hello r,</span>
 
 	<span style="color:#898887;"># Error: Variable open or with characters not allowed</span>
-	<span style="color:#bf0303;text-decoration:underline;">@</span>{var
-	<span style="color:#bf0303;text-decoration:underline;">@</span>{sdf&amp;s}
+	<span style="color:#bf0303;text-decoration:underline;">@</span><span style="color:#ff5500;">{va</span><span style="color:#ff5500;text-decoration:underline;">r</span>
+	<span style="color:#bf0303;text-decoration:underline;">@</span><span style="color:#ff5500;">{sdf&amp;s}</span>
 
 	<span style="color:#898887;"># Error: Open brackets</span>
 	/<span style="color:#ff5500;">{hello{ab</span><span style="color:#ca60ca;">,</span><span style="color:#ff5500;">cd}worl</span><span style="color:#ff5500;text-decoration:underline;">d</span> <span style="font-weight:bold;"> kr</span>,
@@ -208,7 +208,11 @@
 
 	<span style="color:#898887;"># Error: Empty brackets</span>
 	/hello<span style="color:#bf0303;text-decoration:underline;">[]</span>hello<span style="color:#bf0303;text-decoration:underline;">{}</span>hello<span style="color:#bf0303;text-decoration:underline;">()</span>he <span style="font-weight:bold;"> kr</span>,
-
+	
+	<span style="color:#898887;"># Comment within rule</span>
+	<span style="color:#0057ae;font-weight:bold;">dbus</span> (<span style="font-weight:bold;">send</span>)         <span style="color:#bf0303;text-decoration:underline;">#</span>No_comment
+		<span style="color:#006e28;">name</span>=org.hello, <span style="color:#898887;">#Comment</span>
+	
 	<span style="color:#898887;"># Error: Open rule</span>
 	/home/<span style="color:#3daee9;">*</span>/file<span style="font-weight:bold;"> rw</span>
 	<span style="color:#0057ae;font-weight:bold;text-decoration:underline;">capability</span> <span style="color:#0057ae;">dac_override</span>

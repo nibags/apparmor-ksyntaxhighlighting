@@ -188,11 +188,11 @@ profile syntax_error /usr/bin/error flags=<beginfold id='2'>(</beginfold id='2'>
 	include hello<beginfold id='4'><</beginfold id='4'>filepath<endfold id='4'>></endfold id='4'>bye
 	#includefilepath
 	# include
-	<beginfold id='3'>file</beginfold id='3'> #include /hello r<endfold id='3'>,</endfold id='3'>
+	<beginfold id='3'>file</beginfold id='3'> #include /hello r,
 
 	# Error: Variable open or with characters not allowed
-	@<beginfold id='1'>{</beginfold id='1'>var
-	@<beginfold id='1'>{</beginfold id='1'>sdf&s<endfold id='1'>}</endfold id='1'>
+	@{var
+	@{sdf&s}
 
 	# Error: Open brackets
 	/{hello{ab,cd}world  kr<endfold id='3'>,</endfold id='3'>
@@ -202,7 +202,11 @@ profile syntax_error /usr/bin/error flags=<beginfold id='2'>(</beginfold id='2'>
 
 	# Error: Empty brackets
 	/hello[]hello{}hello()he  kr<endfold id='3'>,</endfold id='3'>
-
+	
+	# Comment within rule
+	<beginfold id='3'>dbus</beginfold id='3'> <beginfold id='2'>(</beginfold id='2'>send<endfold id='2'>)</endfold id='2'>         #No_comment
+		name=org.hello<endfold id='3'>,</endfold id='3'> #Comment
+	
 	# Error: Open rule
 	/home/*/file rw
 	<endfold id='3'>capability</endfold id='3'> dac_override<beginfold id='3'>capability</beginfold id='3'> dac_override

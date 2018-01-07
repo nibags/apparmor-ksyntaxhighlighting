@@ -202,7 +202,11 @@ profile syntax_error /usr/bin/error flags=(complain audit) {
 
 	# Error: Empty brackets
 	/hello[]hello{}hello()he  kr,
-
+	
+	# Comment within rule
+	dbus (send)         #No_comment
+		name=org.hello, #Comment
+	
 	# Error: Open rule
 	/home/*/file rw
 	capability dac_override
