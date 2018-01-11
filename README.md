@@ -6,12 +6,12 @@
 
 ```
 This file is part of the KSyntaxHighlighting Framework of KDE. 
-Included in KDE Frameworks 5.39.0 and higher.
+Version 3 is included in KDE Frameworks 5.39.0 and higher.
 ```
 
 ## Description:
 
-Add syntax highlighting to KDE text editors (as Kate, KWrite 
+Add syntax highlighting to KDE text editors (as Kate, KWrite, KDevelop 
 or any application that uses the KSyntaxHighlighting Framework) 
 for the **AppArmor Security Profiles**.
 
@@ -19,10 +19,10 @@ The file `apparmor.xml` contains the definition of the syntax highlighting.
 If you want to test the highlighting, you can find a sample AppArmor profile 
 in the `test` folder.
 
-## About Syntax Highlighting Files of KSyntaxHighlighting:
+## About XML Files of Syntax Highlighting Definition:
 
-Syntax highlighting definition files consist of XML files 
-that are compiled in the KSyntaxHighlighting library of KDE Frameworks. 
+The syntax highlighting definition files, of the KSyntaxHighlighting Framework, 
+consist of XML files that are compiled in the KDE Frameworks libraries.
 
 However, these XML files can also be stored in:
 
@@ -37,17 +37,29 @@ For more details of KSyntaxHighlighting Framework, visit:
 
 ## Installation:
 
+**NOTE:** KDE Frameworks 5.39.0 includes version 3 of the file `apparmor.xml`. Version 4 has not yet been published.
+
 Copy the file `apparmor.xml` to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` (for local user) or `/usr/share/org.kde.syntax-highlighting/syntax/` (for all users).
 
-Ex.:
+Ex.: 
+For local user:
 ```
 mkdir -p $HOME/.local/share/org.kde.syntax-highlighting/syntax/
 cp ./apparmor.xml $HOME/.local/share/org.kde.syntax-highlighting/syntax/
 ```
-
+For all users:
 ```
 sudo mkdir -p /usr/share/org.kde.syntax-highlighting/syntax/
 sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
 ```
 
-**NOTE:** KDE Frameworks 5.39 includes version 3 of the file `apparmor.xml`. Version 4 has not yet been published.
+## Usage:
+
+Syntax highlighting of AppArmor profiles is automatically applied to named files: 
+`bin.*`, `sbin.*`, `usr.bin.*`, `usr.sbin.*`, `usr.lib.*`, `usr.lib64.*`, `usr.lib32.*`, `usr.libx32.*`, 
+`usr.libexec.*`, `usr.local.bin.*`, `usr.local.sbin.*`, `usr.local.lib*`, `opt.*` & `etc.cron.*`.
+
+You can also force the syntax highlighting, by writing a comment with: 
+```
+kate: syntax AppArmor Security Profile
+```

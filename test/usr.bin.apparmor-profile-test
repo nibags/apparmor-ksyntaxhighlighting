@@ -7,7 +7,7 @@
 
 include <tunables/global>
 
-# Declare an AppArmor variables to help with overrides
+# Variable assignment
 @{FOO_LIB}=/usr/lib{,32,64}/foo
 @{USER_DIR} = @{HOME}/Public @{HOME}/Desktop
 @{USER_DIR} += @{HOME}/Hello
