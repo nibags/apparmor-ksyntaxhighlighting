@@ -43,12 +43,12 @@ Copy the file `apparmor.xml` to `$HOME/.local/share/org.kde.syntax-highlighting/
 
 Ex.: 
 For local user:
-```
+```bash
 mkdir -p $HOME/.local/share/org.kde.syntax-highlighting/syntax/
 cp ./apparmor.xml $HOME/.local/share/org.kde.syntax-highlighting/syntax/
 ```
 For all users:
-```
+```bash
 sudo mkdir -p /usr/share/org.kde.syntax-highlighting/syntax/
 sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
 ```
