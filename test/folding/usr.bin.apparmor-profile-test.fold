@@ -1,0 +1,157 @@
+# Sample AppArmor Profile.
+# License: Public Domain
+# Last change: January 25, 2018
+
+include <tunables/global>
+
+# Variable assignment
+@{FOO_LIB}=/usr/lib{,32,64}/foo
+@{USER_DIR} = @{HOME}/Public @{HOME}/Desktop
+@{USER_DIR} += @{HOME}/Hello
+
+# Profile for /usr/bin/foo
+/usr/bin/foo (attach_disconnected, enforce) <beginfold id='1'>{</beginfold id='1'>
+	include <abstractions/base>
+	include <abstractions/dbus>
+
+	#include <abstractions/ubuntu-helpers>
+	#include<abstractions/wayland>
+	#include"/etc/apparmor.d/abstractions/ubuntu-konsole"
+	include "/etc/apparmor.d/abstractions/openssl"
+
+	/{,**/} r<endfold id='2'>,</endfold id='2'># Read only directories
+
+	owner /{home,media,mnt,srv,net}/** r<endfold id='2'>,</endfold id='2'>
+	owner @{USER_DIR}/** rw<endfold id='2'>,</endfold id='2'>
+	audit deny owner /**/* mx<endfold id='2'>,</endfold id='2'>
+	/**.[tT][xX][tT] r<endfold id='2'>,</endfold id='2'>  # txt
+	
+	owner <beginfold id='2'>file</beginfold id='2'> @{HOME}/.local/share/foo/{,**} rwkl<endfold id='2'>,</endfold id='2'>
+	owner @{HOME}/.config/foo/{,**}           rwk<endfold id='2'>,</endfold id='2'>
+	owner @{HOME}/.config/*                   rw<endfold id='2'>,</endfold id='2'>
+	owner @{HOME}/.config/*.[a-zA-Z0-9]*      rwk<endfold id='2'>,</endfold id='2'>
+	owner @{HOME}/.cache/foo/{,**}            rwk<endfold id='2'>,</endfold id='2'>
+
+	"/usr/share/**" r<endfold id='2'>,</endfold id='2'>
+	"/var/lib/flatpak/exports/share/**" r<endfold id='2'>,</endfold id='2'>
+	"/var/lib/flatpak/app/**/export/share/applications/*.desktop" r<endfold id='2'>,</endfold id='2'>
+
+	allow <beginfold id='2'>file</beginfold id='2'> /etc/nsswitch.conf           r<endfold id='2'>,</endfold id='2'>
+	allow /etc/fstab                        r<endfold id='2'>,</endfold id='2'>
+	/etc/udev/udev.conf                     r<endfold id='2'>,</endfold id='2'>
+	/etc/xdg/**                             r<endfold id='2'>,</endfold id='2'>
+	/etc/xdg/Trolltech.conf                 k<endfold id='2'>,</endfold id='2'>
+	deny /etc/xdg/{autostart,systemd}/**    r<endfold id='2'>,</endfold id='2'>
+	deny /boot/**                           rwlkmx<endfold id='2'>,</endfold id='2'>
+	
+	owner @{PROC}/@{pid}/{cmdline,mountinfo,mounts,stat,status,vmstat} r<endfold id='2'>,</endfold id='2'>
+	/sys/devices/**/uevent r<endfold id='2'>,</endfold id='2'>
+
+	/usr/bin/foo         ixr<endfold id='2'>,</endfold id='2'>
+	/usr/bin/dolphin     PUx<endfold id='2'>,</endfold id='2'>
+	/usr/bin/*           Pixr<endfold id='2'>,</endfold id='2'>
+	/usr/bin/khelpcenter Cx  -> sanitized_helper<endfold id='2'>,</endfold id='2'>
+	/usr/bin/helloworld  Cxr ->
+			hello_world<endfold id='2'>,</endfold id='2'>
+	
+	/usr/lib{,32,64}/{,@{multiarch}/}qt5/plugins/{,**/}*.so m<endfold id='2'>,</endfold id='2'>
+	@{FOO_LIB}/{,**} mr<endfold id='2'>,</endfold id='2'>
+	
+	audit deny /dev/{audio,video}* rwlkmx<endfold id='2'>,</endfold id='2'>
+
+	# Dbus rules
+	<beginfold id='2'>dbus</beginfold id='2'> (send)
+		bus=system
+		path=/org/freedesktop/NetworkManager
+		interface=org.freedesktop.DBus.Introspectable
+		peer=(name=org.freedesktop.NetworkManager label=unconfined)<endfold id='2'>,</endfold id='2'>
+	<beginfold id='2'>dbus</beginfold id='2'> (send receive)
+		bus=system
+		path=/org/freedesktop/NetworkManager
+		interface=org.freedesktop.NetworkManager
+		member={Introspect,state}
+		peer=(name=(org.freedesktop.NetworkManager|org.freedesktop.DBus))<endfold id='2'>,</endfold id='2'>
+	<beginfold id='2'>dbus</beginfold id='2'> (send)
+		bus=session
+		path=/org/gnome/GConf/Database/*
+		member={AddMatch,AddNotify,AllEntries,LookupExtended,RemoveNotify}<endfold id='2'>,</endfold id='2'>
+	<beginfold id='2'>dbus</beginfold id='2'> (bind)
+		bus=system
+		name=org.bluez<endfold id='2'>,</endfold id='2'>
+
+	# Signal rules
+	<beginfold id='2'>signal</beginfold id='2'> (send) set=(term) peer=unconfined<endfold id='2'>,</endfold id='2'>
+	<beginfold id='2'>signal</beginfold id='2'> (send, receive) set=(int exists rtmin+8) peer=/usr/lib/hello/world//foo-helper<endfold id='2'>,</endfold id='2'>
+
+	# Child profile
+	profile hello_world <beginfold id='1'>{</beginfold id='1'>
+		# File rules (three different ways)
+		<beginfold id='2'>file</beginfold id='2'> /usr/lib{,32,64}/helloworld/**.so mr<endfold id='2'>,</endfold id='2'>
+		/usr/lib{,32,64}/helloworld/** r<endfold id='2'>,</endfold id='2'>
+		rk /usr/lib{,32,64}/helloworld/hello,file<endfold id='2'>,</endfold id='2'>
+
+		# Link rules (two ways)
+		l /foo1 -> /bar<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>link</beginfold id='2'> /foo2 -> bar<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>link</beginfold id='2'> /foo3 to bar<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>link</beginfold id='2'> subset /link* -> /**<endfold id='2'>,</endfold id='2'>
+
+		# Network rules
+		<beginfold id='2'>network</beginfold id='2'> inet6 tcp<endfold id='2'>,</endfold id='2'> #Allow access to tcp only for inet6 addresses
+		<beginfold id='2'>network</beginfold id='2'> netlink dgram<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>network</beginfold id='2'> bluetooth<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>network</beginfold id='2'> unspec dgram<endfold id='2'>,</endfold id='2'>
+
+		# Capability rules
+		<beginfold id='2'>capability</beginfold id='2'> dac_override<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>capability</beginfold id='2'> sys_admin<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>capability</beginfold id='2'> sys_chroot<endfold id='2'>,</endfold id='2'>
+
+		# Mount rules
+		<beginfold id='2'>mount</beginfold id='2'> options=(rw bind remount nodev noexec) vfstype=ecryptfs /home/*/.helloworld/ -> /home/*/helloworld/<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>mount</beginfold id='2'> options in (rw, bind) / -> /run/hellowordd/*.mnt<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>mount</beginfold id='2'> option=read-only fstype=btrfs /dev/sd[a-z][1-9]* -> /media/*/*<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>umount</beginfold id='2'> /home/*/helloworld/<endfold id='2'>,</endfold id='2'>
+
+		# Pivot Root rules
+		<beginfold id='2'>pivot_root</beginfold id='2'> oldroot=/mnt/root/old/ /mnt/root/<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>pivot_root</beginfold id='2'> /mnt/root/<endfold id='2'>,</endfold id='2'>
+
+		# Ptrace rules
+		<beginfold id='2'>ptrace</beginfold id='2'> (trace) peer=unconfined<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>ptrace</beginfold id='2'> (read, trace, tracedby) peer=/usr/lib/hello/helloword<endfold id='2'>,</endfold id='2'>
+
+		# Unix rules
+		<beginfold id='2'>unix</beginfold id='2'> (connect receive send) type=(stream) peer=(label=unconfined addr=@/tmp/ibus/dbus-*)<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>unix</beginfold id='2'> (send,receive) type=(stream) protocol=0 peer=(addr=none)<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>unix</beginfold id='2'> peer=(label=@{profile_name},addr=@helloworld)<endfold id='2'>,</endfold id='2'>
+
+		# Rlimit rule
+		set <beginfold id='2'>rlimit</beginfold id='2'> data  <= 100M<endfold id='2'>,</endfold id='2'>
+		set <beginfold id='2'>rlimit</beginfold id='2'> nproc <= 10<endfold id='2'>,</endfold id='2'>
+		set <beginfold id='2'>rlimit</beginfold id='2'> memlock <= 2GB<endfold id='2'>,</endfold id='2'>
+		set <beginfold id='2'>rlimit</beginfold id='2'> rss <= infinity<endfold id='2'>,</endfold id='2'>
+
+		# Change Profile rules
+		<beginfold id='2'>change_profile</beginfold id='2'> unsafe /** -> [^u/]**<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>change_profile</beginfold id='2'> unsafe /** -> {u,un,unc,unco,uncon,unconf,unconfi,unconfin,unconfine}<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>change_profile</beginfold id='2'> /bin/bash  -> 
+			new_profile<endfold id='2'>,</endfold id='2'>
+
+		# Alias
+		<beginfold id='2'>alias</beginfold id='2'> /usr/ -> /mnt/usr/<endfold id='2'>,</endfold id='2'>
+	<endfold id='1'>}</endfold id='1'>
+
+	# Hat
+	^foo-helper <beginfold id='1'>{</beginfold id='1'>
+		<beginfold id='2'>network</beginfold id='2'> unix stream<endfold id='2'>,</endfold id='2'>
+		<beginfold id='2'>unix</beginfold id='2'> stream<endfold id='2'>,</endfold id='2'>
+
+		/usr/hi\"esc\x23esc\032esc\*es\{esc\ rw r<endfold id='2'>,</endfold id='2'> # Escape expressions
+
+		# Text after a variable is highlighted as path
+		<beginfold id='2'>file</beginfold id='2'> /my/path r<endfold id='2'>,</endfold id='2'>
+		@{FOO_LIB}file r<endfold id='2'>,</endfold id='2'>
+		@{FOO_LIB}#my/path r<endfold id='2'>,</endfold id='2'> #Comment
+	<endfold id='1'>}</endfold id='1'>
+<endfold id='1'>}</endfold id='1'>
