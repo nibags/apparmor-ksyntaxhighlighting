@@ -37,7 +37,7 @@
 		http://manpages.ubuntu.com/manpages/artful/en/man5/apparmor.d.5.html
   
   Change log:
-	* Version 5 [30-Jan-2018, by Nibaldo González]:
+	* Version 5 [31-Jan-2018, by Nibaldo González]:
 		- Fix 'itemDatas' and end-of-rules keywords.
 	* Version 4 [25-Jan-2018, by Nibaldo González]: (AppArmor 2.12.0)
 		- New keywords: network and mount rules, default abstractions, variables and others.
