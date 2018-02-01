@@ -1168,27 +1168,27 @@
 			<!-- Rule/Profile on new line, in rule not closed -->
 			<context name="_end_rule_irnc" attribute="Normal Text" lineEndContext="#stay">
 				<keyword String="profile_head" context="#pop#pop!_profile_name" attribute="Profile Head Error" firstNonSpace="true" endRegion="Rule"/>
-				<DetectChar char="&#094;" context="#pop#pop!_profile_name" attribute="Profile Head Error" firstNonSpace="true" endRegion="Rule"/>
-				<keyword String="access_types" context="#pop#pop" attribute="Access Qualifier Error" firstNonSpace="true" endRegion="Rule"/>
-				<keyword String="qualifiers" context="#pop#pop" attribute="Qualifier Error" firstNonSpace="true" endRegion="Rule"/>
-				<keyword String="file_qualifiers" context="#pop#pop" attribute="File Qualifier Error" firstNonSpace="true" endRegion="Rule"/>
-				<RegExpr String="set(?=\s+rlimit\b)" context="#pop#pop" attribute="Rule Error" firstNonSpace="true" endRegion="Rule"/>
+				<DetectChar char="&#094;"      context="#pop#pop!_profile_name" attribute="Profile Head Error" firstNonSpace="true" endRegion="Rule"/>
+				<keyword String="access_types"          context="#pop#pop" attribute="Access Qualifier Error"  firstNonSpace="true" endRegion="Rule"/>
+				<keyword String="qualifiers"            context="#pop#pop" attribute="Qualifier Error"         firstNonSpace="true" endRegion="Rule"/>
+				<keyword String="file_qualifiers"       context="#pop#pop" attribute="File Qualifier Error"    firstNonSpace="true" endRegion="Rule"/>
+				<RegExpr String="set(?=\s+rlimit\b)"    context="#pop#pop" attribute="Rule Error"              firstNonSpace="true" endRegion="Rule"/>
 
-				<keyword String="rule_name_file" context="#pop#pop!_rule_file" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_file"          context="#pop#pop!_rule_file"          attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 				<keyword String="rule_name_alias" context="#pop#pop!_default_rule_with_comments" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_capability" context="#pop#pop!_rule_capability" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_network" context="#pop#pop!_rule_network" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_pivotroot" context="#pop#pop!_rule_pivotroot" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_ptrace" context="#pop#pop!_rule_ptrace" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_signal" context="#pop#pop!_rule_signal" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_dbus" context="#pop#pop!_rule_dbus" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_link" context="#pop#pop!_rule_link" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_capability"    context="#pop#pop!_rule_capability"    attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_network"       context="#pop#pop!_rule_network"       attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_pivotroot"     context="#pop#pop!_rule_pivotroot"     attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_ptrace"        context="#pop#pop!_rule_ptrace"        attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_signal"        context="#pop#pop!_rule_signal"        attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_dbus"          context="#pop#pop!_rule_dbus"          attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_link"          context="#pop#pop!_rule_link"          attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 				<keyword String="rule_name_changeprofile" context="#pop#pop!_rule_changeprofile" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_rlimit" context="#pop#pop!_rule_rlimit" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_rlimit"        context="#pop#pop!_rule_rlimit"        attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 				<!-- This must be at the end of each rule context, to avoid replacing the 'unix' & 'remount' keywords 
 					 ('unix' is also a domain of the network rule; 'remount' is also a flag of the mount rule). -->
 				<keyword String="rule_name_mount" context="#pop#pop!_rule_mount" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_unix" context="#pop#pop!_rule_unix" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_unix"  context="#pop#pop!_rule_unix"  attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 			</context>
 
 			<!-- Paths & File Globals -->
