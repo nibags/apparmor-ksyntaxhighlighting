@@ -1224,7 +1224,7 @@
 				<AnyChar context="#stay" attribute="Globbing Char 1" String="*?"/>
 			</context>
 			<context name="_pcre_escape_str" attribute="Normal Text" lineEndContext="#stay">
-				<RegExpr context="#stay" attribute="Escape Expression" String="\\[\s\{\}\[\]\(\)\|\*\?\-\^,]"/>
+				<RegExpr context="#stay" attribute="Escape Expression" String="\\[\s\{\}\[\]\(\)\|\*\?\-\^,#]"/>
 				<HlCStringChar context="#stay" attribute="Escape Expression"/>
 			</context>
 			
