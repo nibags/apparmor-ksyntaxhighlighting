@@ -37,16 +37,18 @@
 		http://manpages.ubuntu.com/manpages/artful/en/man5/apparmor.d.5.html
   
   Change log:
-	* Version 5 [31-Jan-2018, by Nibaldo González]:
+	* Version 6 [??-???-2018]:
+		- Add the profile flag 'xattrs' keyword.
+	* Version 5 [31-Jan-2018]:
 		- Fix 'itemDatas' and end-of-rules keywords.
-	* Version 4 [25-Jan-2018, by Nibaldo González]: (AppArmor 2.12.0)
+	* Version 4 [25-Jan-2018]: (AppArmor 2.12.0)
 		- New keywords: network and mount rules, default abstractions, variables and others.
 		- Improvements in the highlighting of Include rules, variables, rlimit rules, 
 		  profile name, transition profile rules, end of rule context & file permissions.
 		- Fixes: Comments within rules, sensitive keywords, owner qualifier & others.
-	* Version 3 [24-Sep-2017, by Nibaldo González]:
+	* Version 3 [24-Sep-2017]:
 		- Fix incorrect highlighting of the DBus rule 'name' keyword.
-	* Version 2 [29-Aug-2017, by Nibaldo González]:
+	* Version 2 [29-Aug-2017]:
 		- Improvements in highlighting and bug fixes.
 		- Each rule has its own context.
 		- The profile name is highlighted in the profile header and profile transition rules.
@@ -73,6 +75,7 @@
 		</list>
 		<list name="profile_options">
 			<item>flags</item>
+			<item>xattrs</item>
 		</list>
 		<list name="profile_flags">
 			<item>audit</item>
