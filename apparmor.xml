@@ -727,8 +727,8 @@
 				<keyword context="#stay" attribute="Other Option" String="boolean"/>
 
 				<IncludeRules context="_brackets_error"/>
-				<DetectChar context="#stay" attribute="Normal Text" char="{" beginRegion="Profile"/>
-				<DetectChar context="#stay" attribute="Normal Text" char="}" endRegion="Profile"/>
+				<DetectChar context="#stay" attribute="Operator 1" char="{" beginRegion="Profile"/>
+				<DetectChar context="#stay" attribute="Operator 1" char="}" endRegion="Profile"/>
 				<DetectChar context="_parentheses_block_profile" attribute="Normal Text" char="("/>
 				<DetectChar context="_r_square_brackets" attribute="Globbing Brackets" char="["/>
 
