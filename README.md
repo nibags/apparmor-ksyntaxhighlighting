@@ -2,11 +2,12 @@
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>) (Valparaíso, Chile)
 
-**Last Change:** January 2018
+**Last Change:** February 2018
 
 ```
-This file is part of the KSyntaxHighlighting Framework of KDE. 
-Version 3 is included in KDE Frameworks 5.39.0 and higher.
+This file is part of the KDE's KSyntaxHighlighting Framework. 
+Version 5 is included in KDE Frameworks 5.43.0+. 
+Version 3 is included in KDE Frameworks 5.39.0+. 
 ```
 
 ## Description:
@@ -37,7 +38,7 @@ For more details of KSyntaxHighlighting Framework, visit:
 
 ## Installation:
 
-**NOTE:** KDE Frameworks 5.39.0 includes version 3 of the file `apparmor.xml`. Version 4 has not yet been published.
+**NOTE:** KDE Frameworks 5.43.0 includes version 5 of the file `apparmor.xml`. 
 
 Copy the file `apparmor.xml` to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` (for local user) or `/usr/share/org.kde.syntax-highlighting/syntax/` (for all users).
 
