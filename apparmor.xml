@@ -1110,8 +1110,8 @@
 			<context name="_default_profile_transition" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_variable_simple"/>
 				<AnyChar context="#stay" attribute="Globbing Char 3" String="*?"/>
-				<RegExpr context="#stay" attribute="Globbing Char 3" String="\\[\s\{\}\[\]\(\)\|\*\?\-\^,]"/>
 				<HlCStringChar context="#stay" attribute="Globbing Char 3"/>
+				<RegExpr context="#stay" attribute="Globbing Char 3" String="\\."/>
 			</context>
 
 			<!-- //SubProfile -->
@@ -1227,8 +1227,8 @@
 				<AnyChar context="#stay" attribute="Globbing Char 1" String="*?"/>
 			</context>
 			<context name="_pcre_escape_str" attribute="Normal Text" lineEndContext="#stay">
-				<RegExpr context="#stay" attribute="Escape Expression" String="\\[\s\{\}\[\]\(\)\|\*\?\-\^,#]"/>
 				<HlCStringChar context="#stay" attribute="Escape Expression"/>
+				<RegExpr context="#stay" attribute="Escape Expression" String="\\."/>
 			</context>
 			
 			<!-- Groups of brackets: { }, [ ] and ( ) -->
