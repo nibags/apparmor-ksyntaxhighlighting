@@ -1,8 +1,8 @@
-# AppArmor Profiles Syntax Highlighting Definition File, for the KSyntaxHighlighting Framework
+# AppArmor Profiles Syntax Highlighting Definition File for Kate
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>) (Valparaíso, Chile)
 
-**Last Change:** February 2018
+**Last Change:** April 2018
 
 ```
 This file is part of the KDE's KSyntaxHighlighting Framework. 
@@ -13,7 +13,7 @@ Version 3 is included in KDE Frameworks 5.39.0+.
 ## Description:
 
 Add syntax highlighting to KDE text editors (as Kate, KWrite, KDevelop 
-or any application that uses the KSyntaxHighlighting Framework) 
+or any application that uses the KSyntaxHighlighting/KTextEditor Framework) 
 for the **AppArmor Security Profiles**.
 
 The file `apparmor.xml` contains the definition of the syntax highlighting. 
@@ -22,7 +22,7 @@ in the `test` folder.
 
 ## About XML Files of Syntax Highlighting Definition:
 
-The syntax highlighting definition files, of the KSyntaxHighlighting Framework, 
+The syntax highlighting definition files, of the KSyntaxHighlighting/KTextEditor Framework, 
 consist of XML files that are compiled in the KDE Frameworks libraries.
 
 However, these XML files can also be stored in:
@@ -33,7 +33,6 @@ However, these XML files can also be stored in:
 For more details of KSyntaxHighlighting Framework, visit:
 * Official Repository: https://phabricator.kde.org/source/syntax-highlighting/
 * Documentation: https://docs.kde.org/stable5/en/applications/katepart/highlight.html
-* Announcement: https://kate-editor.org/2016/11/15/ksyntaxhighlighting-a-new-syntax-highlighting-framework/
 
 
 ## Installation:

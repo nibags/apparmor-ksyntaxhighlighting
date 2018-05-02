@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd"
 [
-	<!ENTITY varname     "[A-Za-z]\w*">
-	<!ENTITY exec        "[pPcC]?[iuU]?x">
-	<!-- Characters not allowed in a path -->
-	<!ENTITY nopathchar_simple  ")&quot;">
-	<!ENTITY nopathchar         "\s\)&quot;">
-	<!-- Path characters after a variable or brackets:
-	     \w +-,.*?@\/ ([{# !$%&':;<>^`|~ and Non-ASCII -->
-	<!ENTITY noaftervar  "&nopathchar;\]\}\=">
+	<!ENTITY pathchar       "\w\-\.\*\?\+@,\\&amp;&#037;&#036;&#033;&#126;">
+	<!ENTITY nopathchar     "\s\)&quot;">
+	<!ENTITY varname        "[A-Za-z]\w*">
+	<!ENTITY exec           "[pPcC]?[iuU]?x">
 ]>
 
 <!--
@@ -35,24 +31,22 @@
   ==========================================================================================
   
   Last update:
-	Syntax highlighting based in AppArmor 2.13.0
+	Syntax highlighting based in AppArmor 2.12.0
 	For more details about the syntax of AppArmor profiles, visit:
 		https://gitlab.com/apparmor/apparmor/wikis/Documentation
 		http://manpages.ubuntu.com/manpages/artful/en/man5/apparmor.d.5.html
   
   Change log:
-	* Version 6 [15-Apr-2018, by Nibaldo G.]: (AppArmor 2.13.0)
-		- Some optimizations. Allow any character as escape.
-		- Add the profile flag 'xattrs' keyword and 'if exists' in Include rules.
-		- Improvements in the detection of brackets and paths that start with variables.
-	* Version 4 [25-Jan-2018, by Nibaldo G.]: (AppArmor 2.12.0)
+	* Version 5 [31-Jan-2018, by Nibaldo González]:
+		- Fix 'itemDatas' and end-of-rules keywords.
+	* Version 4 [25-Jan-2018, by Nibaldo González]: (AppArmor 2.12.0)
 		- New keywords: network and mount rules, default abstractions, variables and others.
 		- Improvements in the highlighting of Include rules, variables, rlimit rules, 
 		  profile name, transition profile rules, end of rule context & file permissions.
 		- Fixes: Comments within rules, sensitive keywords, owner qualifier & others.
-	* Version 3 [24-Sep-2017, by Nibaldo G.]:
+	* Version 3 [24-Sep-2017, by Nibaldo González]:
 		- Fix incorrect highlighting of the DBus rule 'name' keyword.
-	* Version 2 [29-Aug-2017, by Nibaldo G.]:
+	* Version 2 [29-Aug-2017, by Nibaldo González]:
 		- Improvements in highlighting and bug fixes.
 		- Each rule has its own context.
 		- The profile name is highlighted in the profile header and profile transition rules.
@@ -60,7 +54,6 @@
 		- Initial version. Support for profile syntax of Apparmor 2.11.
 -->
 
-<!-- NOTE: This version (6) has not yet been published, so it remains version 5 -->
 <language name="AppArmor Security Profile"
 		version="5"
 		kateversion="5.0"
@@ -80,7 +73,6 @@
 		</list>
 		<list name="profile_options">
 			<item>flags</item>
-			<item>xattrs</item>
 		</list>
 		<list name="profile_flags">
 			<item>audit</item>
@@ -107,7 +99,7 @@
 		</list>
 		<list name="qualifiers">
 			<item>audit</item>
-			<!-- noaudit/quiet, defined, if, else, not -->
+			<!-- defined, if, else, not -->
 		</list>
 		
 		<!-- Capabilities, Capability Rule.
@@ -517,11 +509,6 @@
 			<item>safe</item>
 			<item>unsafe</item>
 		</list>
-
-		<list name="rule_include">
-			<item>if</item>
-			<item>exists</item>
-		</list>
 		
 		<!-- Permissions -->
 		<list name="base_accesses">
@@ -575,8 +562,6 @@
 			<item>dbus-strict</item>
 			<item>dconf</item>
 			<item>dovecot-common</item>
-			<item>dri-common</item>
-			<item>dri-enumerate</item>
 			<item>enchant</item>
 			<item>fcitx</item>
 			<item>fcitx-strict</item>
@@ -685,9 +670,6 @@
 			<item>True</item>
 			<item>False</item>
 		</list>
-		<list name="numbers">
-			<item>infinity</item>
-		</list>
 		<list name="other_words">
 			<item>unspec</item>
 			<item>none</item>
@@ -735,15 +717,15 @@
 				<DetectChar context="_comment" attribute="Comment" char="#"/>
 				
 				<Detect2Chars context="_variable_assignment" attribute="Variable" char="@" char1="{" lookAhead="true" firstNonSpace="true"/>
-				<Detect2Chars context="_variable_profile" attribute="Variable" char="@" char1="{" lookAhead="true"/>
+				<Detect2Chars context="_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
 				<RegExpr context="_variable_assignment_operator" attribute="Variable" String="@&varname;(?=\s*(\+?\=|$))" insensitive="true" firstNonSpace="true"/>
-				<Detect2Chars context="_boolean_assignment" attribute="Variable" char="$" char1="{" lookAhead="true" firstNonSpace="true"/>
 				<Detect2Chars context="_boolean" attribute="Variable" char="$" char1="{" lookAhead="true"/>
-				<RegExpr context="_boolean_assignment_operator" attribute="Variable" String="\$&varname;(?=\s*(\=|$))" insensitive="true" firstNonSpace="true"/>
-				
+				<RegExpr context="#stay" attribute="Variable" String="\$&varname;(?=\s*(\=|$))" insensitive="true" firstNonSpace="true"/>
+				<keyword context="#stay" attribute="Other Option" String="boolean"/>
+
 				<IncludeRules context="_brackets_error"/>
-				<DetectChar context="#stay" attribute="Operator 1" char="{" beginRegion="Profile"/>
-				<DetectChar context="#stay" attribute="Operator 1" char="}" endRegion="Profile"/>
+				<DetectChar context="#stay" attribute="Normal Text" char="{" beginRegion="Profile"/>
+				<DetectChar context="#stay" attribute="Normal Text" char="}" endRegion="Profile"/>
 				<DetectChar context="_parentheses_block_profile" attribute="Normal Text" char="("/>
 				<DetectChar context="_r_square_brackets" attribute="Globbing Brackets" char="["/>
 
@@ -767,9 +749,10 @@
 				<keyword context="_rule_rlimit" attribute="Rule Error" String="rule_name_rlimit" beginRegion="Rule"/> <!-- set rlimit -->
 				<keyword context="_rule_set" attribute="Rule" String="rule_name_set"/>
 
-				<IncludeRules context="_operators"/>
 				<IncludeRules context="_path"/>
 				<IncludeRules context="_text_quoted"/>
+				<IncludeRules context="_operators"/>
+				<keyword context="#stay" attribute="Normal Text" String="default_variables"/>
 				<IncludeRules context="_file_rule_permissions"/>
 			</context>
 			
@@ -779,22 +762,14 @@
 
 				<Detect2Chars context="_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
 				<Detect2Chars context="_boolean" attribute="Variable" char="$" char1="{" lookAhead="true"/>
+				<keyword context="#stay" attribute="Other Option" String="boolean"/>
 				<IncludeRules context="_brackets_error"/>
 			</context>
 			<context name="_comment" attribute="Comment" lineEndContext="#pop">
+				<LineContinue context="#pop" attribute="Comment"/>
 				<DetectSpaces />
 				<IncludeRules context="##Alerts"/>
 				<IncludeRules context="##Modelines"/>
-			</context>
-
-			<context name="_operators" attribute="Normal Text" lineEndContext="#stay">
-				<Detect2Chars context="_subprofile" attribute="SubProfile Operator" char="/" char1="/"/>
-				<DetectChar context="#stay" attribute="Operator 1" char="="/>
-				<Detect2Chars context="#stay" attribute="Operator 1" char="+" char1="="/>
-				<Detect2Chars context="#stay" attribute="Operator 2" char="-" char1="&gt;"/>
-			</context>
-			<context name="_operators_keywords" attribute="Normal Text" lineEndContext="#stay">
-				<RegExpr context="#stay" attribute="Operator 2" String="(^|\s)(in|to)\b"/>
 			</context>
 
 			<!-- Profile Header:
@@ -826,19 +801,18 @@
 
 			<!-- Include Rule: include <abstraction/path> -->
 			<context name="_include" attribute="Preprocessor" lineEndContext="#pop">
-				<Detect2Chars context="#pop" attribute="Error" char="&quot;" char1="&quot;"/>
-				<Detect2Chars context="#pop" attribute="Error" char="&lt;" char1="&gt;"/>
-				<RegExpr context="#stay" attribute="Error" String="&lt;+(?=[&lt;\s])"/>
-				<DetectChar context="#pop!_include_preplib_t" attribute="Prep. Lib" char="&lt;" lookAhead="true"/> <!-- <magic/path> -->
-				<DetectChar context="#pop!_include_preplib_q" attribute="Prep. Lib" char="&quot;"/> <!-- "/abs/path" -->
+				<RegExpr context="#pop!_include_preplib_t" attribute="Prep. Lib" String="&lt;(?![\s&lt;&gt;])"/> <!-- <magic/path> -->
+				<RegExpr context="#pop!_include_preplib_q" attribute="Prep. Lib" String="&quot;(?!&quot;)"/> <!-- "/abs/path" -->
 				<RegExpr context="#pop" attribute="Prep. Lib" String="/\S*(?=(\s|$))"/> <!-- /abs/path -->
-				<keyword context="#stay" attribute="Preprocessor" String="rule_include"/>
+				<RegExpr context="#stay" attribute="Error" String="[^\s/&lt;&quot;]+"/>
 			</context>
 			<context name="_include_preplib_t" attribute="Prep. Lib" lineEndContext="#pop">
 				<DetectChar context="#pop" attribute="Prep. Lib" char="&gt;"/>
 				<keyword context="#stay" attribute="Prep. Lib" String="default_abstractions"/>
-				<RegExpr context="#pop" attribute="Open Prep. Lib" String="\S(?=($|\s))" insensitive="true"/>
+				<RegExpr context="#pop" attribute="Open Prep. Lib" String="[^&lt;&gt;\s](?=($|\s))" insensitive="true"/>
+				
 				<DetectSpaces context="#pop" attribute="Normal Text" lookAhead="true"/>
+				<RegExpr context="#pop" attribute="Error" String="&lt;"/>
 			</context>
 			<context name="_include_preplib_q" attribute="Prep. Lib" lineEndContext="#pop">
 				<DetectChar context="#pop" attribute="Prep. Lib" char="&quot;"/>
@@ -848,49 +822,34 @@
 			
 			<!-- Variables: @{VAR} -->
 			<context name="_variable" attribute="Variable" lineEndContext="#pop">
-				<!-- Text after variable is highlighted as path -->
-				<RegExpr context="#pop!_path_content" attribute="Variable" String="\}(?=[^&noaftervar;])" insensitive="true"/>
-				<IncludeRules context="_variable_common"/>
-			</context>
-			<context name="_variable_common" attribute="Variable" lineEndContext="#pop">
 				<!-- Invalid character or open brackets -->
 				<RegExpr context="#pop" attribute="Error" String="@(?=\{([^a-zA-Z]|&varname;[^\w\}]|[^\}]*$))" insensitive="true"/>
 				<DetectSpaces context="#pop" attribute="Normal Text" lookAhead="true"/>
+				<!-- Text after variable is highlighted as path -->
+				<RegExpr context="#pop!_path_content" attribute="Variable" String="\}(?=[&pathchar;\[\{\(#])" insensitive="true"/>
 				<DetectChar context="#pop" attribute="Variable" char="}"/>
 			</context>
 			<context name="_variable_simple" attribute="Normal Text" lineEndContext="#stay">
 				<RegExpr context="#stay" attribute="Variable" String="@\{&varname;\}" insensitive="true"/>
 			</context>
-
-			<context name="_variable_profile" attribute="Variable" lineEndContext="#pop">
-				<!-- The same as the '_variable' context... -->
-				<RegExpr context="_variable_profile_error" attribute="Error" String="@(?=\{([^a-zA-Z]|&varname;[^\w\}]|[^\}]*$))" insensitive="true"/>
-				<RegExpr context="#pop!_path_content" attribute="Variable" String="\}(?=[^&noaftervar;])" insensitive="true"/>
-				<DetectChar context="#pop" attribute="Variable" char="}"/>
-				<DetectSpaces context="#pop" attribute="Normal Text" lookAhead="true"/>
-			</context>
-			<context name="_variable_profile_error" attribute="Normal Text" lineEndContext="#pop#pop">
-				<DetectChar context="#stay" attribute="Operator 1" char="{" beginRegion="Profile"/>
-				<keyword context="#pop#pop" attribute="Normal Text" String="default_variables"/>
-				<RegExpr context="#pop#pop" attribute="Normal Text" String="[^a-zA-Z_]" lookAhead="true"/>
-			</context>
 			<!-- @{VARIABLE} = A B C -->
 			<context name="_variable_assignment" attribute="Variable" lineEndContext="#pop">
 				<RegExpr context="#pop!_variable_assignment_operator" attribute="Variable" String="\}(?=\s*\+?\=)"/>
-				<IncludeRules context="_variable_profile"/>
+				<IncludeRules context="_variable"/>
 			</context>
 			<context name="_variable_assignment_operator" attribute="Operator 1" lineEndContext="#pop"> <!-- '=' or '+=' -->
 				<!-- After the operator, highlighting as "Path" the entire line, from the first non-space character -->
 				<RegExpr context="#pop!_variable_assignment_line" attribute="Operator 1" String="\=(\s*)"/>
 			</context>
 			<context name="_variable_assignment_line" attribute="Path" lineEndContext="#pop">
-				<IncludeRules context="_path_globbing"/>
+				<IncludeRules context="_path_globbing_chars"/>
+				<IncludeRules context="_common"/>
+				<IncludeRules context="_path"/>
 				<IncludeRules context="_text_quoted"/>
-				<IncludeRules context="_variable_simple"/>
-				<RegExpr context="#stay" attribute="Variable" String="\$\{&varname;\}"/>
+				<IncludeRules context="_globbrackets_rule"/>
+				<DetectChar context="_round_brackets" attribute="Globbing Brackets" char="("/>
 				<Detect2Chars context="_subprofile" attribute="SubProfile Operator" char="/" char1="/"/>
 				<RegExpr context="#stay" attribute="Error" String=",(?=(\s|$))"/> <!-- End of rule comma -->
-				<StringDetect context="#stay" attribute="Error" String="#include" insensitive="true"/>
 				
 				<!-- NOTE: [V4][Jan 06, 2018] AppArmor does not detect comments in variable assignment lines 
 					 (these are carried through to the policy). This is an AppArmor bug, therefore, comments are 
@@ -898,40 +857,46 @@
 				<RegExpr context="_comment_variable_assignment_line" attribute="Path" String="\s(?=#)"/>
 			</context>
 			<context name="_comment_variable_assignment_line" attribute="Error" lineEndContext="#pop" fallthrough="true" fallthroughContext="#pop">
-				<DetectChar context="#pop" attribute="Error" char="#"/>
+				<DetectChar context="#pop!_comment" attribute="Error" char="#"/>
 			</context>
-
 			<!-- ${BOOLEAN} -->
 			<context name="_boolean" attribute="Variable" lineEndContext="#pop">
 				<RegExpr context="#pop" attribute="Error" String="\$(?=\{([^a-zA-Z]|&varname;[^\w\}]|[^\}]*$))" insensitive="true"/>
 				<DetectSpaces context="#pop" attribute="Normal Text" lookAhead="true"/>
 				<DetectChar context="#pop" attribute="Variable" char="}"/>
 			</context>
-			<context name="_boolean_assignment" attribute="Variable" lineEndContext="#pop">
-				<RegExpr context="#pop!_boolean_assignment_operator" attribute="Variable" String="\}(?=\s*\=)"/>
-				<IncludeRules context="_boolean"/>
-			</context>
-			<context name="_boolean_assignment_operator" attribute="Normal Text" lineEndContext="#pop">
-				<RegExpr context="#pop!_boolean_assignment_line" attribute="Error" String="\=(?=\s*$)"/>
-				<DetectChar context="#pop!_boolean_assignment_line" attribute="Operator 1" char="="/>
-			</context>
-			<context name="_boolean_assignment_line" attribute="Error" lineEndContext="#pop">
-				<DetectSpaces context="#stay" attribute="Normal Text"/>
-				<keyword context="#stay" attribute="Permissions" String="boolean"/>
-			</context>
 			
 			<!-- Access Modes / File Permissions -->
 			<context name="_permissions" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_permissions_correction"/>
-				<RegExpr context="#stay" attribute="Permissions" String="(^|\s)(([rwkml]|&exec;)+|([rakml]|&exec;)+)(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Permissions" String="(^|\s)([rwkml]|&exec;)+(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Permissions" String="(^|\s)([rakml]|&exec;)+(?=($|[\s,]))"/>
 			</context>
 			<context name="_file_rule_permissions" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_permissions_correction"/>
-				<RegExpr context="_rule_file" attribute="Permissions" String="(^|\s)(([rwkml]|&exec;)+|([rakml]|&exec;)+)(?=($|[\s,]))"/>
+				<RegExpr context="_rule_file" attribute="Permissions" String="(^|\s)([rwkml]|&exec;)+(?=($|[\s,]))"/>
+				<RegExpr context="_rule_file" attribute="Permissions" String="(^|\s)([rakml]|&exec;)+(?=($|[\s,]))"/>
 			</context>
 			<context name="_permissions_correction" attribute="Normal Text" lineEndContext="#stay">
 				<!-- Incompatible execution modes -->
-				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*(p[iUu]?x([rwakml]|p[iUu]?x)*([PcC]?[iUu]?x)|P[iUu]?x([rwakml]|P[iUu]?x)*([pcC]?[iUu]?x)|c[iUu]?x([rwakml]|c[iUu]?x)*([PpC]?[iUu]?x)|C[iUu]?x([rwakml]|C[iUu]?x)*([Ppc]?[iUu]?x)|[PpCc]?ix([rwakml]|[PpCc]?ix)*([PpCc]?[Uu]?x)|[PpCc]?ux([rwakml]|[PpCc]?ux)*([PpCc]?[iU]?x)|[PpCc]?Ux([rwakml]|[PpCc]?Ux)*([PpCc]?[iu]?x)|[iuU]?x([rwakml]|[iuU]?x)*([PpCc][iuU]?x)|x[rwakmlx]*[iuU]x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*p[iUu]?x([rwakml]|p[iUu]?x)*([PcC]?[iUu]?x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*P[iUu]?x([rwakml]|P[iUu]?x)*([pcC]?[iUu]?x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*c[iUu]?x([rwakml]|c[iUu]?x)*([PpC]?[iUu]?x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*C[iUu]?x([rwakml]|C[iUu]?x)*([Ppc]?[iUu]?x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*[PpCc]?ix([rwakml]|[PpCc]?ix)*([PpCc]?[Uu]?x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*[PpCc]?ux([rwakml]|[PpCc]?ux)*([PpCc]?[iU]?x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*[PpCc]?Ux([rwakml]|[PpCc]?Ux)*([PpCc]?[iu]?x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*[iuU]?x([rwakml]|[iuU]?x)*([PpCc][iuU]?x)([rwakml]|&exec;)*(?=($|[\s,]))"/>
+				<RegExpr context="#stay" attribute="Normal Text" String="(^|\s)[rwakml]*x[rwakmlx]*[iuU]x([rwakml]|&exec;)*(?=($|[\s,]))"/>
+			</context>
+			
+			<!-- Operators -->
+			<context name="_operators" attribute="Normal Text" lineEndContext="#stay">
+				<Detect2Chars context="_subprofile" attribute="SubProfile Operator" char="/" char1="/"/>
+				<DetectChar context="#stay" attribute="Operator 1" char="="/>
+				<Detect2Chars context="#stay" attribute="Operator 1" char="+" char1="="/>
+				<Detect2Chars context="#stay" attribute="Operator 2" char="-" char1="&gt;"/>
+				<RegExpr context="#stay" attribute="Operator 2" String="(^|\s)(in|to)(?=($|\s))"/>
 			</context>
 			
 			<!-- RULES -->
@@ -939,20 +904,18 @@
 			<!-- For all rules -->
 			<context name="_default_rule_without_parentheses" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_common"/>
-				<!-- Highlight as path the text after the '=' operator, except keywords or simple words ([\w\-\+]+) -->
+				<!-- Highlight as path the text after the '=' operator, except keywords or simple words -->
 				<RegExpr context="#stay" attribute="Error" String="\=(?=\s*$)"/>
-				<RegExpr context="_path_content" attribute="Operator 1" String="\=\s*(?=[^\s\(]*[^&noaftervar;\w\+\-\(,])" insensitive="true"/>
+				<RegExpr context="_path_content" attribute="Operator 1" String="\=\s*(?=[^\s\(]*[\.\*\?@\\/\[\{#&amp;&#037;&#036;&#033;&#126;])" insensitive="true"/>
 				<IncludeRules context="_operators"/>
 				<IncludeRules context="_path"/>
 				<IncludeRules context="_text_quoted"/>
+				<IncludeRules context="_globbrackets_rule"/>
 				<IncludeRules context="_pcre_escape_str"/>
 				<keyword context="#stay" attribute="Other Data" String="other_words" insensitive="true"/>
-				<DetectChar context="_r_curly_brackets" attribute="Globbing Brackets" char="{"/>
-				<DetectChar context="_r_square_brackets" attribute="Globbing Brackets" char="["/>
-				<IncludeRules context="_operators_keywords"/>
 
 				<!-- AppArmor does not detect comments within rules (except in file & alias rules) -->
-				<IncludeRules context="_comment_not_allowed"/>
+				<IncludeRules context="_rule_comment_not_allowed"/>
 				<!-- This must be at the end of each context (to avoid conflicts with some keywords) -->
 				<IncludeRules context="_end_rule"/>
 			</context>
@@ -964,18 +927,9 @@
 				<RegExpr context="_comment" attribute="Comment" String="#(?!include)" insensitive="true"/>
 				<IncludeRules context="_default_rule"/>
 			</context>
-			
-			<context name="_comment_not_allowed" attribute="Normal Text" lineEndContext="#stay">
+			<context name="_rule_comment_not_allowed" attribute="Normal Text" lineEndContext="#stay">
 				<DetectChar context="_comment" attribute="Error" char="#" firstNonSpace="true"/>
 				<DetectChar context="#stay" attribute="Error" char="#"/>
-			</context>
-			<context name="_r_curly_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
-				<RegExpr context="#pop!_path_content" attribute="Globbing Brackets" String="\}(?=[^&noaftervar;])" insensitive="true"/>
-				<IncludeRules context="_curly_brackets"/>
-			</context>
-			<context name="_r_square_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
-				<RegExpr context="#pop!_path_content" attribute="Globbing Brackets" String="\](?=[^&noaftervar;])" insensitive="true"/>
-				<IncludeRules context="_square_brackets"/>
 			</context>
 
 			<!-- Network Rule -->
@@ -1100,9 +1054,9 @@
 				<Int context="#stay" attribute="Number"/>
 				<HlCOct context="#stay" attribute="Number"/>
         		<HlCHex context="#stay" attribute="Number"/>
-				<AnyChar context="#stay" attribute="Number" String="-+"/>
+				<RegExpr context="#stay" attribute="Number" String="[\-\+]\s*(?=[\d\.])"/>
 				<RegExpr context="#stay" attribute="Flags" String="([KMG]B?|[shd]|us|ms|min|sec|(minute|day|hour|week|second)(s?)|(milli|micro)second(s?))\b"/>
-				<keyword context="#stay" attribute="Number" String="numbers"/>
+				<WordDetect context="#stay" attribute="Other Data" String="infinity"/>
 				<IncludeRules context="_default_rule"/>
 			</context>
 
@@ -1152,16 +1106,14 @@
 			</context>
 			<context name="_default_profile_transition" attribute="Normal Text" lineEndContext="#stay">
 				<IncludeRules context="_variable_simple"/>
-				<AnyChar context="#stay" attribute="Globbing Char in Tran. Prof." String="*?"/>
-				<HlCStringChar context="#stay" attribute="Globbing Char in Tran. Prof."/>
-				<RegExpr context="#stay" attribute="Globbing Char in Tran. Prof." String="\\."/>
+				<AnyChar context="#stay" attribute="Globbing Char 3" String="*?"/>
+				<RegExpr context="#stay" attribute="Globbing Char 3" String="\\[\s\{\}\[\]\(\)\|\*\?\-\^,]"/>
+				<HlCStringChar context="#stay" attribute="Globbing Char 3"/>
 			</context>
 
 			<!-- //SubProfile -->
 			<context name="_subprofile" attribute="SubProfile" lineEndContext="#pop">
-				<RegExpr context="#pop" attribute="SubProfile" String=",([&nopathchar;/\{\}\(#]|$)" lookAhead="true"/>
-				<DetectSpaces context="#pop" attribute="SubProfile" lookAhead="true"/>
-				<AnyChar context="#pop" attribute="SubProfile" String="&nopathchar_simple;/{}(" lookAhead="true"/>
+				<RegExpr context="#pop" attribute="SubProfile" String="([&nopathchar;/\{\}\(]|,[&nopathchar;/\{\}\(#]|,$|$)" lookAhead="true"/>
 				<IncludeRules context="_variable_simple"/>
 				<IncludeRules context="_path_globbing_chars"/>
 			</context>
@@ -1169,23 +1121,23 @@
 			<!-- Parentheses Block: ( ) -->
 			<context name="_parentheses_block" attribute="Normal Text" lineEndContext="#stay">
 				<DetectChar context="#pop" attribute="Normal Text" char=")"/>
-				<!-- Highlight as path the text after the '=' operator, except keywords or simple words ([\w\-\+]+) -->
+				<!-- Highlight as path the text after the '=' operator, except keywords or simple words -->
 				<RegExpr context="#stay" attribute="Error" String="\=(?=\s*$)"/>
-				<RegExpr context="_parentheses_path_content" attribute="Operator 1" String="\=\s*(?=[^\s\(\),]*[^&noaftervar;\w\+\-\(,])" insensitive="true"/>
-				
+				<RegExpr context="_parentheses_path_content" attribute="Operator 1" String="\=\s*(?=[^\s\(\),]*[\.\*\?@\\/\[\{#&amp;&#037;&#036;&#033;&#126;])" insensitive="true"/>
+
 				<IncludeRules context="_operators"/>
 				<IncludeRules context="_text_quoted"/>
-				<DetectChar context="_parentheses_path_content" attribute="Path" char="/"/>
-				<Detect2Chars context="_parentheses_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
 				<keyword context="#stay" attribute="Other Data" String="other_words" insensitive="true"/>
 				
+				<RegExpr context="_parentheses_path_content" attribute="Path" String="/(?=[^&nopathchar;/,])" insensitive="true"/> <!-- /my/path -->
+				<RegExpr context="_parentheses_path_content" attribute="Path" String="[&pathchar;]+\.[^&nopathchar;\.,]" lookAhead="true" insensitive="true"/> <!-- my.path -->
+				<IncludeRules context="_path_simple"/>
+				
 				<IncludeRules context="_common"/>
+				<IncludeRules context="_globbrackets_rule"/>
 				<DetectChar context="_round_brackets" attribute="Globbing Brackets" char="("/>
-				<DetectChar context="_p_curly_brackets" attribute="Globbing Brackets" char="{"/>
-				<DetectChar context="_p_square_brackets" attribute="Globbing Brackets" char="["/>
-				<IncludeRules context="_comment_not_allowed"/>
+				<IncludeRules context="_rule_comment_not_allowed"/>
 				<IncludeRules context="_pcre_escape_str"/>
-				<IncludeRules context="_operators_keywords"/>
 			</context>
 			<context name="_parentheses_path_content" attribute="Path" lineEndContext="#pop">
 				<DetectChar context="#pop" attribute="Normal Text" char="," lookAhead="true"/>
@@ -1195,18 +1147,6 @@
 			<context name="_parentheses_subprofile" attribute="SubProfile" lineEndContext="#pop">
 				<DetectChar context="#pop" attribute="Normal Text" char="," lookAhead="true"/>
 				<IncludeRules context="_subprofile"/> <!-- End with &nopathchar; -->
-			</context>
-			<context name="_parentheses_variable" attribute="Variable" lineEndContext="#pop">
-				<RegExpr context="#pop!_parentheses_path_content" attribute="Variable" String="\}(?=[^&noaftervar;,])" insensitive="true"/>
-				<IncludeRules context="_variable_common"/>
-			</context>
-			<context name="_p_curly_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
-				<RegExpr context="#pop!_parentheses_path_content" attribute="Globbing Brackets" String="\}(?=[^&noaftervar;,])" insensitive="true"/>
-				<IncludeRules context="_curly_brackets"/>
-			</context>
-			<context name="_p_square_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
-				<RegExpr context="#pop!_parentheses_path_content" attribute="Globbing Brackets" String="\](?=[^&noaftervar;,])" insensitive="true"/>
-				<IncludeRules context="_square_brackets"/>
 			</context>
 			
 			<context name="_parentheses_block_profile" attribute="Normal Text" lineEndContext="#stay">
@@ -1227,46 +1167,45 @@
 			</context>
 			<!-- Rule/Profile on new line, in rule not closed -->
 			<context name="_end_rule_irnc" attribute="Normal Text" lineEndContext="#stay">
-				<!-- Use keyword delimiters! -->
-				<RegExpr context="_end_rule_keywords" attribute="Normal Text" String="(profile|hat|allow|deny|audit|owner|file|alias|(set\s+)?rlimit|capability|network|(u|re)?mount|pivot_root|ptrace|unix|signal|dbus|link|change_profile)([\s\.\(\)&lt;&gt;\=/\\\[\]\{\},&quot;&#039;\^;:\|]|$)" firstNonSpace="true" lookAhead="true"/>
-			</context>
-			<context name="_end_rule_keywords" attribute="Normal Text" lineEndContext="#pop">
-				<keyword String="profile_head"       context="#pop#pop#pop!_profile_name" attribute="Profile Head Error"     endRegion="Rule"/>
-				<keyword String="access_types"       context="#pop#pop#pop"               attribute="Access Qualifier Error" endRegion="Rule"/>
-				<keyword String="qualifiers"         context="#pop#pop#pop"               attribute="Qualifier Error"        endRegion="Rule"/>
-				<keyword String="file_qualifiers"    context="#pop#pop#pop"               attribute="File Qualifier Error"   endRegion="Rule"/>
-				<RegExpr String="set(?=\s+rlimit\b)" context="#pop#pop#pop"               attribute="Rule Error"             endRegion="Rule"/>
+				<keyword String="profile_head" context="#pop#pop!_profile_name" attribute="Profile Head Error" firstNonSpace="true" endRegion="Rule"/>
+				<DetectChar char="&#094;"      context="#pop#pop!_profile_name" attribute="Profile Head Error" firstNonSpace="true" endRegion="Rule"/>
+				<keyword String="access_types"          context="#pop#pop" attribute="Access Qualifier Error"  firstNonSpace="true" endRegion="Rule"/>
+				<keyword String="qualifiers"            context="#pop#pop" attribute="Qualifier Error"         firstNonSpace="true" endRegion="Rule"/>
+				<keyword String="file_qualifiers"       context="#pop#pop" attribute="File Qualifier Error"    firstNonSpace="true" endRegion="Rule"/>
+				<RegExpr String="set(?=\s+rlimit\b)"    context="#pop#pop" attribute="Rule Error"              firstNonSpace="true" endRegion="Rule"/>
 
-				<keyword String="rule_name_file"          context="#pop#pop#pop!_rule_file"          attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_alias" context="#pop#pop#pop!_default_rule_with_comments" attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_capability"    context="#pop#pop#pop!_rule_capability"    attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_network"       context="#pop#pop#pop!_rule_network"       attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_pivotroot"     context="#pop#pop#pop!_rule_pivotroot"     attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_ptrace"        context="#pop#pop#pop!_rule_ptrace"        attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_signal"        context="#pop#pop#pop!_rule_signal"        attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_dbus"          context="#pop#pop#pop!_rule_dbus"          attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_link"          context="#pop#pop#pop!_rule_link"          attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_changeprofile" context="#pop#pop#pop!_rule_changeprofile" attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_rlimit"        context="#pop#pop#pop!_rule_rlimit"        attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_file"          context="#pop#pop!_rule_file"          attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_alias" context="#pop#pop!_default_rule_with_comments" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_capability"    context="#pop#pop!_rule_capability"    attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_network"       context="#pop#pop!_rule_network"       attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_pivotroot"     context="#pop#pop!_rule_pivotroot"     attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_ptrace"        context="#pop#pop!_rule_ptrace"        attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_signal"        context="#pop#pop!_rule_signal"        attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_dbus"          context="#pop#pop!_rule_dbus"          attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_link"          context="#pop#pop!_rule_link"          attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_changeprofile" context="#pop#pop!_rule_changeprofile" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_rlimit"        context="#pop#pop!_rule_rlimit"        attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 				<!-- This must be at the end of each rule context, to avoid replacing the 'unix' & 'remount' keywords 
 					 ('unix' is also a domain of the network rule; 'remount' is also a flag of the mount rule). -->
-				<keyword String="rule_name_mount" context="#pop#pop#pop!_rule_mount" attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<keyword String="rule_name_unix"  context="#pop#pop#pop!_rule_unix"  attribute="Rule Error" endRegion="Rule" beginRegion="Rule"/>
-				<RegExpr context="#pop" attribute="Normal Text" String="."/>
+				<keyword String="rule_name_mount" context="#pop#pop!_rule_mount" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+				<keyword String="rule_name_unix"  context="#pop#pop!_rule_unix"  attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 			</context>
 
 			<!-- Paths & File Globals -->
 
 			<context name="_path" attribute="Normal Text" lineEndContext="#stay">
-				<DetectChar context="_path_content" attribute="Path" char="/"/>
+				<RegExpr context="_path_content" attribute="Path" String="/(?=[^&nopathchar;/])" insensitive="true"/> <!-- /my/path -->
+				<RegExpr context="_path_content" attribute="Path" String="[&pathchar;]+\.[^&nopathchar;\.]" lookAhead="true" insensitive="true"/> <!-- my.path -->
+				<IncludeRules context="_path_simple"/>
 			</context>
 			<context name="_path_content" attribute="Path" lineEndContext="#pop">
-				<RegExpr context="#pop" attribute="Path" String=",(\s|$)" lookAhead="true"/>
-				<DetectSpaces context="#pop" attribute="Path" lookAhead="true"/>
-				<AnyChar context="#pop" attribute="Path" String="&nopathchar_simple;" lookAhead="true"/>
+				<RegExpr context="#pop" attribute="Path" String="([&nopathchar;]|,\s|,$)" lookAhead="true" insensitive="true"/>
 				<Detect2Chars context="_subprofile" attribute="SubProfile Operator" char="/" char1="/"/>
 				<IncludeRules context="_variable_simple"/>
 				<IncludeRules context="_path_globbing"/>
+			</context>
+			<context name="_path_simple" attribute="Normal Text" lineEndContext="#stay">
+				<RegExpr context="#stay" attribute="Path" String="/(?=([&nopathchar;]|,\s|,$|$))"/> <!-- / -->
 			</context>
 
 			<!-- Globbing -->
@@ -1282,19 +1221,18 @@
 				<IncludeRules context="_pcre_escape_str"/>
 			</context>
 			<context name="_globbing_chars" attribute="Normal Text" lineEndContext="#stay">
-				<AnyChar context="#stay" attribute="Globbing Char" String="*?"/>
+				<AnyChar context="#stay" attribute="Globbing Char 1" String="*?"/>
 			</context>
 			<context name="_pcre_escape_str" attribute="Normal Text" lineEndContext="#stay">
-				<HlCStringChar context="#stay" attribute="Escape Char"/>
-				<RegExpr context="#stay" attribute="Escape Char" String="\\."/>
+				<RegExpr context="#stay" attribute="Escape Expression" String="\\[\s\{\}\[\]\(\)\|\*\?\-\^,]"/>
+				<HlCStringChar context="#stay" attribute="Escape Expression"/>
 			</context>
 			
 			<!-- Groups of brackets: { }, [ ] and ( ) -->
 			<context name="_curly_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
 				<DetectChar context="#pop" attribute="Globbing Brackets" char="}"/>
 				<IncludeRules context="_pcre_escape_str"/>
-				<DetectSpaces context="#pop" attribute="Path" lookAhead="true"/>
-				<AnyChar context="#pop" attribute="Path" String="&nopathchar_simple;" lookAhead="true"/>
+				<RegExpr context="#pop" attribute="Path" String="[&nopathchar;]" lookAhead="true" insensitive="true"/>
 
 				<IncludeRules context="_variable_simple"/>
 				<IncludeRules context="_brackets_error"/>
@@ -1304,42 +1242,56 @@
 				<RegExpr context="#stay" attribute="Open Globbing Brackets" String="[^\s\[\]\{\}\(\)](?=([&nopathchar;]|$))"/>
 				
 				<IncludeRules context="_globbing_chars"/>
-				<DetectChar context="#stay" attribute="Globbing Char of Brackets" char=","/>
+				<DetectChar context="#stay" attribute="Globbing Char 2" char=","/>
 				<keyword context="#stay" attribute="Globbing Brackets" String="default_variables"/>
 			</context>
 			<context name="_square_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
 				<DetectChar context="#pop" attribute="Globbing Brackets" char="]"/>
 				<IncludeRules context="_pcre_escape_str"/>
-				<DetectSpaces context="#pop" attribute="Path" lookAhead="true"/>
-				<DetectChar context="#pop" attribute="Path" char="&quot;" lookAhead="true"/> <!-- &nopathchar; -->
+				<DetectSpaces context="#pop" attribute="Normal Text" lookAhead="true"/>
+				<DetectChar context="#pop" attribute="Path" char="&quot;" lookAhead="true"/>
 
 				<IncludeRules context="_variable_simple"/>
 				<DetectChar context="#stay" attribute="Error" char="["/>
-				<RegExpr context="#stay" attribute="Open Globbing Brackets" String="\S(?=([&quot;\s]|$))"/> <!-- &nopathchar; -->
+				<RegExpr context="#stay" attribute="Open Globbing Brackets" String="\S(?=([\s&quot;]|$))"/>
 
 				<IncludeRules context="_globbing_chars"/>
-				<AnyChar context="#stay" attribute="Globbing Char of Brackets" String="^-"/>
+				<AnyChar context="#stay" attribute="Globbing Char 2" String="^-"/>
 			</context>
 			<context name="_round_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
 				<DetectChar context="#pop" attribute="Globbing Brackets" char=")"/>
 				<IncludeRules context="_pcre_escape_str"/>
-				<DetectSpaces context="#pop" attribute="Path" lookAhead="true"/>
-				<DetectChar context="#pop" attribute="Path" char="&quot;" lookAhead="true"/> <!-- &nopathchar; -->
+				<DetectSpaces context="#pop" attribute="Normal Text" lookAhead="true"/>
+				<DetectChar context="#pop" attribute="Path" char="&quot;" lookAhead="true"/>
 
 				<IncludeRules context="_variable_simple"/>
 				<IncludeRules context="_brackets_error"/>
 				<DetectChar context="_curly_brackets" attribute="Globbing Brackets" char="{"/>
 				<DetectChar context="_square_brackets" attribute="Globbing Brackets" char="["/>
 				<DetectChar context="_round_brackets" attribute="Globbing Brackets" char="("/>
-				<RegExpr context="#stay" attribute="Open Globbing Brackets" String="[^\s\[\]\{\}\(\)](?=([&quot;\s]|$))"/> <!-- &nopathchar; -->
+				<RegExpr context="#stay" attribute="Open Globbing Brackets" String="[^\s\[\]\{\}\(\)](?=([\s&quot;]|$))"/>
 
 				<IncludeRules context="_globbing_chars"/>
-				<DetectChar context="#stay" attribute="Globbing Char of Brackets" char="|"/>
+				<DetectChar context="#stay" attribute="Globbing Char 2" char="|"/>
 			</context>
 			<context name="_brackets_error" attribute="Normal Text" lineEndContext="#stay">
-				<Detect2Chars context="#stay" attribute="Error" char="[" char1="]"/>
-				<Detect2Chars context="#stay" attribute="Error" char="{" char1="}"/>
-				<Detect2Chars context="#stay" attribute="Error" char="(" char1=")"/>
+				<StringDetect context="#stay" attribute="Error" String="[]"/>
+				<StringDetect context="#stay" attribute="Error" String="{}"/>
+				<StringDetect context="#stay" attribute="Error" String="()"/>
+			</context>
+
+			<!-- If the brackets are outside a path -->
+			<context name="_globbrackets_rule" attribute="Normal Text" lineEndContext="#stay">
+				<DetectChar context="_r_curly_brackets" attribute="Globbing Brackets" char="{"/>
+				<DetectChar context="_r_square_brackets" attribute="Globbing Brackets" char="["/>
+			</context>
+			<context name="_r_curly_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
+				<RegExpr context="#pop!_path_content" attribute="Globbing Brackets" String="\}(?=[&pathchar;\[\{\(#])" insensitive="true"/>
+				<IncludeRules context="_curly_brackets"/>
+			</context>
+			<context name="_r_square_brackets" attribute="Globbing Brackets" lineEndContext="#pop">
+				<RegExpr context="#pop!_path_content" attribute="Globbing Brackets" String="\](?=[&pathchar;\[\{\(#])" insensitive="true"/>
+				<IncludeRules context="_square_brackets"/>
 			</context>
 			
 			<!-- Path Quoted -->
@@ -1356,47 +1308,47 @@
 		
 		<itemDatas>
 			<itemData name="Normal Text"    defStyleNum="dsNormal"       spellChecking="false"/>
-			<itemData name="Path"           defStyleNum="dsNormal"       bold="0" spellChecking="false"/>
-			<itemData name="Text Quoted"    defStyleNum="dsString"       bold="0" spellChecking="false"/>
+			<itemData name="Path"           defStyleNum="dsNormal"       bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Text Quoted"    defStyleNum="dsString"       bold="0" italic="0" underline="0" spellChecking="false"/>
 			<itemData name="Comment"        defStyleNum="dsComment"/>
 			<itemData name="Preprocessor"   defStyleNum="dsPreprocessor" spellChecking="false"/>
 			<itemData name="Prep. Lib"      defStyleNum="dsImport"       underline="0" spellChecking="false"/>
 			<itemData name="Open Prep. Lib" defStyleNum="dsImport"       underline="1" spellChecking="false"/>
-			<itemData name="Variable"       defStyleNum="dsDecVal"       bold="0" spellChecking="false"/>
+			<itemData name="Variable"       defStyleNum="dsDecVal"       bold="0" italic="0" underline="0" spellChecking="false"/>
 			
-			<itemData name="Profile Head"            defStyleNum="dsFunction"  bold="1" underline="0" spellChecking="false"/>
-			<itemData name="Profile Name"            defStyleNum="dsFunction"  bold="0" underline="0" spellChecking="false"/>
+			<itemData name="Profile Head"            defStyleNum="dsFunction"  bold="1" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Profile Name"            defStyleNum="dsFunction"  bold="0" italic="0" underline="0" spellChecking="false"/>
 			<itemData name="Transition Profile Name" defStyleNum="dsFunction"  bold="0" italic="1" underline="0" spellChecking="false"/>
-			<itemData name="Qualifier"               defStyleNum="dsNormal"    bold="1" underline="0" spellChecking="false"/>
-			<itemData name="Access Qualifier"        defStyleNum="dsWarning"   bold="1" underline="0" spellChecking="false"/>
-			<itemData name="File Qualifier"          defStyleNum="dsVariable"  bold="1" underline="0" spellChecking="false"/>
-			<itemData name="Rule"                    defStyleNum="dsVariable"  bold="1" underline="0" spellChecking="false"/>
-			<itemData name="Data"                    defStyleNum="dsVariable"  bold="0" spellChecking="false"/>
-			<itemData name="Other Data"              defStyleNum="dsNormal"    bold="0" italic="1" spellChecking="false"/>
-			<itemData name="Permissions"             defStyleNum="dsKeyword"   bold="1" spellChecking="false"/>
+			<itemData name="Qualifier"               defStyleNum="dsNormal"    bold="1" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Access Qualifier"        defStyleNum="dsWarning"   bold="1" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="File Qualifier"          defStyleNum="dsVariable"  bold="1" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Rule"                    defStyleNum="dsVariable"  bold="1" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Data"                    defStyleNum="dsVariable"  bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Other Data"              defStyleNum="dsNormal"    bold="0" italic="1" underline="0" spellChecking="false"/>
+			<itemData name="Permissions"             defStyleNum="dsKeyword"   bold="1" italic="0" underline="0" spellChecking="false"/>
 			
-			<itemData name="Option"              defStyleNum="dsOthers"     bold="0" spellChecking="false"/>
-			<itemData name="Other Option"        defStyleNum="dsDataType"   bold="0" spellChecking="false"/>
-			<itemData name="Flags"               defStyleNum="dsVerbatimString"      spellChecking="false"/>
-			<itemData name="SubProfile"          defStyleNum="dsAnnotation" bold="0" spellChecking="false"/>
-			<itemData name="SubProfile Operator" defStyleNum="dsAnnotation" bold="1" spellChecking="false"/>
+			<itemData name="Option"              defStyleNum="dsOthers"     bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Other Option"        defStyleNum="dsDataType"   bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Flags"               defStyleNum="dsVerbatimString"      italic="0" underline="0" spellChecking="false"/>
+			<itemData name="SubProfile"          defStyleNum="dsAnnotation" bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="SubProfile Operator" defStyleNum="dsAnnotation" bold="1" italic="0" underline="0" spellChecking="false"/>
 			<itemData name="Operator 1"          defStyleNum="dsOperator"   spellChecking="false"/>
-			<itemData name="Operator 2"          defStyleNum="dsWarning"    bold="1" spellChecking="false"/>
+			<itemData name="Operator 2"          defStyleNum="dsWarning"    bold="1" italic="0" underline="0" spellChecking="false"/>
 			<itemData name="Number"              defStyleNum="dsDecVal"     spellChecking="false"/>
 			<itemData name="End of Rule Char"    defStyleNum="dsNormal"     spellChecking="false"/>
 
-			<itemData name="Escape Char"            defStyleNum="dsSpecialChar"   bold="0" spellChecking="false"/>
-			<itemData name="Globbing Char"          defStyleNum="dsSpecialChar"   bold="0" spellChecking="false"/>
-			<itemData name="Globbing Char of Brackets"    defStyleNum="dsAnnotation"    bold="0" spellChecking="false"/>
-			<itemData name="Globbing Char in Tran. Prof." defStyleNum="dsSpecialString" bold="0" italic="1" spellChecking="false"/>
-			<itemData name="Globbing Brackets"      defStyleNum="dsSpecialString" bold="0" underline="0" spellChecking="false"/>
-			<itemData name="Open Globbing Brackets" defStyleNum="dsSpecialString" bold="0" underline="1" spellChecking="false"/>
+			<itemData name="Escape Expression"      defStyleNum="dsSpecialChar"   bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Globbing Char 1"        defStyleNum="dsSpecialChar"   bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Globbing Char 2"        defStyleNum="dsAnnotation"    bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Globbing Char 3"        defStyleNum="dsSpecialString" bold="0" italic="1" underline="0" spellChecking="false"/>
+			<itemData name="Globbing Brackets"      defStyleNum="dsSpecialString" bold="0" italic="0" underline="0" spellChecking="false"/>
+			<itemData name="Open Globbing Brackets" defStyleNum="dsSpecialString" bold="0" italic="0" underline="1" spellChecking="false"/>
 			
-			<itemData name="Rule Error"             defStyleNum="dsVariable" bold="1" underline="1" spellChecking="false"/>
-			<itemData name="Qualifier Error"        defStyleNum="dsNormal"   bold="1" underline="1" spellChecking="false"/>
-			<itemData name="Access Qualifier Error" defStyleNum="dsWarning"  bold="1" underline="1" spellChecking="false"/>
-			<itemData name="File Qualifier Error"   defStyleNum="dsVariable" bold="1" underline="1" spellChecking="false"/>
-			<itemData name="Profile Head Error"     defStyleNum="dsFunction" bold="1" underline="1" spellChecking="false"/>
+			<itemData name="Rule Error"             defStyleNum="dsVariable" bold="1" italic="0" underline="1" spellChecking="false"/>
+			<itemData name="Qualifier Error"        defStyleNum="dsNormal"   bold="1" italic="0" underline="1" spellChecking="false"/>
+			<itemData name="Access Qualifier Error" defStyleNum="dsWarning"  bold="1" italic="0" underline="1" spellChecking="false"/>
+			<itemData name="File Qualifier Error"   defStyleNum="dsVariable" bold="1" italic="0" underline="1" spellChecking="false"/>
+			<itemData name="Profile Head Error"     defStyleNum="dsFunction" bold="1" italic="0" underline="1" spellChecking="false"/>
 			<itemData name="Error"                  defStyleNum="dsError"    spellChecking="false"/>
 		</itemDatas>
 
