@@ -1356,7 +1356,6 @@
 				<RegExpr context="#stay" attribute="Open Globbing Brackets" String="[^&noPathChar;\(\[\{\}\\](?=[&noPathChar;]|$)"/>
 				<IncludeRules context="_default_path"/>
 				<IncludeRules context="_default_curly_brackets"/>
-				<keyword context="#stay" String="default_variables"/>
 			</context>
 			<context name="_square_brackets" attribute="Globbing Brackets" lineEndContext="#pop" fallthrough="true" fallthroughContext="#pop!_square_brackets_content">
 				<RegExpr context="#pop!_square_brackets_content" attribute="Globbing Char of Brackets" String="\^(?=[^\s\]&quot;])"/>
@@ -1402,6 +1401,7 @@
 
 			<context name="_default_curly_brackets" attribute="Globbing Brackets" lineEndContext="#stay">
 				<DetectChar context="#stay" attribute="Globbing Char of Brackets" char=","/>
+				<keyword context="#stay" String="default_variables"/>
 			</context>
 			<context name="_default_round_brackets" attribute="Globbing Brackets" lineEndContext="#stay">
 				<DetectChar context="#stay" attribute="Globbing Char of Brackets" char="|"/>
@@ -1519,4 +1519,4 @@
 	</general>
 
 </language>
-<!-- kate: replace-tabs off; tab-width 3; indent-width 3; remove-trailing-spaces mod; -->
+<!-- kate: replace-tabs off; tab-width 3; indent-width 3; remove-trailing-spaces mod; dynamic-word-wrap off; -->
