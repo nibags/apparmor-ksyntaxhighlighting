@@ -1,8 +1,8 @@
 # AppArmor Profiles Syntax Highlighting Definition File for Kate
 
-**Author:** Nibaldo González (<nibgonz@gmail.com>) (Valparaíso, Chile)
+**Author:** Nibaldo González (<nibgonz@gmail.com>)
 
-**Last Change:** April 2018
+**Last Change:** July 2018
 
 ```
 This file is part of the KDE's KSyntaxHighlighting Framework. 
