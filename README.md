@@ -6,6 +6,7 @@
 
 ```
 This file is part of the KDE's KSyntaxHighlighting Framework. 
+Version 6 is included in KDE Frameworks 5.50.0+. 
 Version 5 is included in KDE Frameworks 5.43.0+. 
 Version 3 is included in KDE Frameworks 5.39.0+. 
 ```
@@ -37,7 +38,7 @@ For more details of KSyntaxHighlighting Framework, visit:
 
 ## Installation:
 
-**NOTE:** KDE Frameworks 5.43.0 includes version 5 of the file `apparmor.xml`. 
+**NOTE:** KDE Frameworks 5.50.0 includes version 6 of `apparmor.xml`. 
 
 Copy the file `apparmor.xml` to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` (for local user) or `/usr/share/org.kde.syntax-highlighting/syntax/` (for all users).
 
@@ -57,7 +58,7 @@ sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
 
 Syntax highlighting of AppArmor profiles is automatically applied to named files: 
 `bin.*`, `sbin.*`, `usr.bin.*`, `usr.sbin.*`, `usr.lib.*`, `usr.lib64.*`, `usr.lib32.*`, `usr.libx32.*`, 
-`usr.libexec.*`, `usr.local.bin.*`, `usr.local.sbin.*`, `usr.local.lib*`, `opt.*` & `etc.cron.*`.
+`usr.libexec.*`, `usr.local.bin.*`, `usr.local.sbin.*`, `usr.local.lib*`, `opt.*`, `etc.cron.*`, `snap.*`, `snap-update-ns.*` & `snap-confine.*`.
 
 You can also force the syntax highlighting, by writing a comment with: 
 ```
