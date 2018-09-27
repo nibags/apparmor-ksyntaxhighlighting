@@ -1,0 +1,82 @@
+# Some test of AppArmor rules,
+# for the syntax highlighting.
+# License: Public Domain
+
+owner @{HOME}/.config/* rw, 
+deny /etc/udev/udev.conf a,
+
+# Error: Include
+include<filepath>
+include <filepath >
+include <filep
+include hello<filepath>bye
+#includefilepath
+# include
+file #include /hello r,
+include <abstr sdfsd
+include "/asd asd
+
+# Transition rules
+/usr/bin/foo cx -> hello*,
+/usr/bin/foo cx -> /path, # fail
+/usr/bin/foo Cx -> abs/,
+/usr/bin/foo cx -> ab[ad/]hello,
+/usr/bin/foo Cx -> ab[ad/]hello/path,
+/usr/bin/foo Cx -> ab[cd/]a[ad/]hello/path,
+
+/usr/bin/foo Cx -> ab[cd[ad/]hello/path,
+/usr/bin/foo Cx -> ab[cd[ad/]as]hello/path,
+/usr/bin/foo Cx -> ab]cd[ad/]hello/path,
+/usr/bin/foo Cx -> ab[hello/path,
+/usr/bin/foo Cx -> ab]hello/path,
+
+/usr/bin/foo cx -> "hello*",
+/usr/bin/foo cx -> "/path", # fail
+/usr/bin/foo Cx -> "abs/",
+/usr/bin/foo cx -> "ab[ad/]hello",
+/usr/bin/foo Cx -> "ab[ad/]hello/path",
+/usr/bin/foo Cx -> "ab[cd/]a[ad/]hello/path",
+
+/usr/bin/foo Cx -> "ab[cd[ad/]hello/path",
+/usr/bin/foo Cx -> "ab]cd[ad/]hello/path",
+/usr/bin/foo Cx -> "ab[hello/path",
+/usr/bin/foo Cx -> "ab]hello/path",
+
+/usr/bin/foo cx -> holas//ssdf/sa,
+/usr/bin/foo cx -> df///d/d//,
+/usr/bin/foo cx -> holas,#sdfsdf,
+/usr/bin/foo Cx -> hola(dsfsd,
+/usr/bin/foo Cx -> hola/h(sdf|ar),
+/usr/bin/foo Cx -> hola(com/sdfsdf,
+/usr/bin/foo Cx -> hola(sdf[sd/f],
+/usr/bin/foo Cx -> hola[sd/s(sdf],
+/usr/bin/foo cx -> sdfsdfsd\32323,
+
+# Profile name
+profile holas { ... }
+profile { ... }
+profile /path { ... }
+profile holas/abc { ... }
+profile #holas { ... }
+
+profile
+holas { ... }
+profile (asd) { ... }
+profile flags { ... }
+profile flags=(complain)#asd { ... }
+profile flags flags=(complain) { ... }
+profile flags/ flags=(complain) { ... }
+profile flags (complain) { ... }
+profile flags(complain) { ... }
+
+profile holas(dss { ... } 
+profile holas(dss/aa { ... }
+profile hola(hola(ho)la(dss/aa { ... }
+profile holas/hola { ... }
+profile holas/hola(hello|bye)asd { ... }
+profile /path { ... }
+profile holas,#sdfsd { ... }
+
+# Include rules
+/does/not/exist mr,   #include <includes/base> /bin/true Px,
+# Open brackets

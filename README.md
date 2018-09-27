@@ -2,19 +2,20 @@
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>)
 
-**Last Change:** July 2018
+**Last Change:** September 2018
 
 ```
-This file is part of the KDE's KSyntaxHighlighting Framework. 
-Version 6 is included in KDE Frameworks 5.50.0+. 
-Version 5 is included in KDE Frameworks 5.43.0+. 
-Version 3 is included in KDE Frameworks 5.39.0+. 
+This file is part of the KDE's KSyntaxHighlighting Framework.
 ```
+**Last version:** Version 7 is included in KDE Frameworks 5.51.0+. 
+
+**Old versions:** Version 6 is included in KDE Frameworks 5.50.0+, version 5 in KDE Frameworks 5.43.0+ and version 3 in KDE Frameworks 5.39.0+. 
+
 
 ## Description:
 
 Add syntax highlighting to KDE text editors (as Kate, KWrite, KDevelop 
-or any application that uses the KSyntaxHighlighting/KTextEditor Framework) 
+or any application that uses the KSyntaxHighlighting or KTextEditor Framework) 
 for the **AppArmor Security Profiles**.
 
 The file `apparmor.xml` contains the definition of the syntax highlighting. 
@@ -23,7 +24,7 @@ in the `test` folder.
 
 ## About XML Files of Syntax Highlighting Definition:
 
-The syntax highlighting definition files, of the KSyntaxHighlighting/KTextEditor Framework, 
+The syntax highlighting definition files, of the KSyntaxHighlighting Framework, 
 consist of XML files that are compiled in the KDE Frameworks libraries.
 
 However, these XML files can also be stored in:
@@ -38,7 +39,7 @@ For more details of KSyntaxHighlighting Framework, visit:
 
 ## Installation:
 
-**NOTE:** KDE Frameworks 5.50.0 includes version 6 of `apparmor.xml`. 
+If you do not have the latest version of KDE Frameworks, you can manually install the latest `apparmor.xml` file. 
 
 Copy the file `apparmor.xml` to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` (for local user) or `/usr/share/org.kde.syntax-highlighting/syntax/` (for all users).
 
@@ -62,5 +63,6 @@ Syntax highlighting of AppArmor profiles is automatically applied to named files
 
 You can also force the syntax highlighting, by writing a comment with: 
 ```
-kate: syntax AppArmor Security Profile
+kate: syntax AppArmor Security Profile;
 ```
+<!-- kate: syntax Markdown; -->
