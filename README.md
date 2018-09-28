@@ -1,5 +1,7 @@
 # AppArmor Profiles Syntax Highlighting Definition File for Kate
 
+![Example of AppArmor profile syntax highlighting](https://raw.githubusercontent.com/nibags/apparmor-ksyntaxhighlighting/master/test/images/apparmor-preview.png)
+
 **Author:** Nibaldo González (<nibgonz@gmail.com>)
 
 **Last Change:** September 2018
