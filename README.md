@@ -1,4 +1,4 @@
-# AppArmor Profiles Syntax Highlighting Definition File for Kate
+# AppArmor Profiles Syntax Highlighting Definition for Kate
 
 ![Example of AppArmor profile syntax highlighting](https://raw.githubusercontent.com/nibags/apparmor-ksyntaxhighlighting/master/test/images/apparmor-preview.png)
 
@@ -6,13 +6,11 @@
 
 **Last Change:** September 2018
 
+**Last Version:** Version 7 is included in KDE Frameworks 5.51.0+ and is based on AppArmor 2.13.0.
+
 ```
 This file is part of the KDE's KSyntaxHighlighting Framework.
 ```
-**Last version:** Version 7 is included in KDE Frameworks 5.51.0+. 
-
-**Old versions:** Version 6 is included in KDE Frameworks 5.50.0+, version 5 in KDE Frameworks 5.43.0+ and version 3 in KDE Frameworks 5.39.0+. 
-
 
 ## Description:
 
@@ -20,9 +18,14 @@ Add syntax highlighting to KDE text editors (as Kate, KWrite, KDevelop
 or any application that uses the KSyntaxHighlighting or KTextEditor Framework) 
 for the **AppArmor Security Profiles**.
 
-The file `apparmor.xml` contains the definition of the syntax highlighting. 
+The `apparmor.xml` file contains the definition of the syntax highlighting. 
 If you want to test the highlighting, you can find a sample AppArmor profile 
 in the `test` folder.
+
+For details on the syntax of AppArmor profiles, visit:
+* AppArmor Documentation: https://gitlab.com/apparmor/apparmor/wikis/Documentation
+* Man Page of apparmor.d: http://manpages.ubuntu.com/manpages/cosmic/en/man5/apparmor.d.5.html
+* AppArmor Repository: https://gitlab.com/apparmor
 
 ## About XML Files of Syntax Highlighting Definition:
 
@@ -37,7 +40,6 @@ However, these XML files can also be stored in:
 For more details of KSyntaxHighlighting Framework, visit:
 * Official Repository: https://phabricator.kde.org/source/syntax-highlighting/
 * Documentation: https://docs.kde.org/stable5/en/applications/katepart/highlight.html
-
 
 ## Installation:
 
@@ -67,4 +69,65 @@ You can also force the syntax highlighting, by writing a comment with:
 ```
 kate: syntax AppArmor Security Profile;
 ```
+
+## List of Versions:
+
+<table>
+    <tr>
+        <th>apparmor.xml<br>Version</th>
+        <th>Date</th>
+        <th>KDE<br>Frameworks</th>
+        <th>AppArmor<br>Support</th>
+        <th>Relevant Changes</th>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>Sep. 15, 2018</td>
+        <td>5.51.0</td>
+        <td></td>
+        <td><ul>
+            <li>Update itemData's style for the new Solarized color schemes of Kate.</li>
+            <li>Fixed freezing of Kate when using this highlighter in open rules, after the update to KF5.50.0.</li>
+        </ul></td>
+    </tr>
+    <tr>
+         <td>6</td>
+         <td>Jul. 24, 2018</td>
+         <td>5.50.0</td>
+         <td>2.13.0</td>
+         <td><ul>
+            <li>Add "if exists" in Include rules.</li>
+            <li>Fixes for Include rules, escapes, globbing in text quoted and more.</li>
+            <li>Improvements in paths that start with variables, hats, variable assignments and and many more.</li>
+        </ul></td>
+    </tr>
+    <tr>
+        <td>4 & 5</td>
+        <td>Jan. 25, 2018</td>
+        <td>5.43.0</td>
+        <td>2.12.0</td>
+        <td><ul>
+            <li>Add keywords of network and mount rules, default abstractions, default variables and others.</li>
+            <li>Do not allow comments within rules and in variable assignment lines.</li>
+        </ul></td>
+    </tr>
+    <tr>
+        <td>2 & 3</td>
+        <td>Sep. 24, 2017</td>
+        <td>5.39.0</td>
+        <td>2.11.0</td>
+        <td><ul>
+            <li>Each rule has its own context.</li>
+            <li>The profile label is highlighted in the profile header and the profile transition rules.</li>
+        </ul></td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Initial version, not published.</td>
+    </tr>
+</table>
+
 <!-- kate: syntax Markdown; -->
