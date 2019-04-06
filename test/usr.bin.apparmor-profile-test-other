@@ -17,30 +17,30 @@ include <abstr sdfsd
 include "/asd asd
 
 # Transition rules
-/usr/bin/foo cx -> hello*,
-/usr/bin/foo cx -> /path, # fail
-/usr/bin/foo Cx -> abs/,
-/usr/bin/foo cx -> ab[ad/]hello,
-/usr/bin/foo Cx -> ab[ad/]hello/path,
-/usr/bin/foo Cx -> ab[cd/]a[ad/]hello/path,
+/usr/bin/foo cx -> hello*,                  # profile name
+/usr/bin/foo cx -> /path,                   # path
+/usr/bin/foo Cx -> abs/,                    # path
+/usr/bin/foo cx -> ab[ad/]hello,            # profile name
+/usr/bin/foo Cx -> ab[ad/]hello/path,       # path
+/usr/bin/foo Cx -> ab[cd/]a[ad/]hello/path, # path
+s
+/usr/bin/foo Cx -> ab[cd[ad/]hello/path,    # path
+/usr/bin/foo Cx -> ab[cd[ad/]as]hello/path, # path
+/usr/bin/foo Cx -> ab]cd[ad/]hello/path,    # path
+/usr/bin/foo Cx -> ab[hello/path,           # profile name
+/usr/bin/foo Cx -> ab]hello/path,           # path
 
-/usr/bin/foo Cx -> ab[cd[ad/]hello/path,
-/usr/bin/foo Cx -> ab[cd[ad/]as]hello/path,
-/usr/bin/foo Cx -> ab]cd[ad/]hello/path,
-/usr/bin/foo Cx -> ab[hello/path,
-/usr/bin/foo Cx -> ab]hello/path,
+/usr/bin/foo cx -> "hello*",                  # profile name
+/usr/bin/foo cx -> "/path",                   # path
+/usr/bin/foo Cx -> "abs/",                    # path
+/usr/bin/foo cx -> "ab[ad/]hello",            # profile name
+/usr/bin/foo Cx -> "ab[ad/]hello/path",       # path
+/usr/bin/foo Cx -> "ab[cd/]a[ad/]hello/path", # path
 
-/usr/bin/foo cx -> "hello*",
-/usr/bin/foo cx -> "/path", # fail
-/usr/bin/foo Cx -> "abs/",
-/usr/bin/foo cx -> "ab[ad/]hello",
-/usr/bin/foo Cx -> "ab[ad/]hello/path",
-/usr/bin/foo Cx -> "ab[cd/]a[ad/]hello/path",
-
-/usr/bin/foo Cx -> "ab[cd[ad/]hello/path",
-/usr/bin/foo Cx -> "ab]cd[ad/]hello/path",
-/usr/bin/foo Cx -> "ab[hello/path",
-/usr/bin/foo Cx -> "ab]hello/path",
+/usr/bin/foo Cx -> "ab[cd[ad/]hello/path",  # path
+/usr/bin/foo Cx -> "ab]cd[ad/]hello/path",  # path
+/usr/bin/foo Cx -> "ab[hello/path",         # profile name
+/usr/bin/foo Cx -> "ab]hello/path",         # path
 
 /usr/bin/foo cx -> holas//ssdf/sa,
 /usr/bin/foo cx -> df///d/d//,
@@ -50,6 +50,7 @@ include "/asd asd
 /usr/bin/foo Cx -> hola(com/sdfsdf,
 /usr/bin/foo Cx -> hola(sdf[sd/f],
 /usr/bin/foo Cx -> hola[sd/s(sdf],
+/usr/bin/foo cx -> df///dd//hat,   # path + hat
 /usr/bin/foo cx -> sdfsdfsd\32323,
 
 # Profile name
@@ -79,4 +80,3 @@ profile holas,#sdfsd { ... }
 
 # Include rules
 /does/not/exist mr,   #include <includes/base> /bin/true Px,
-# Open brackets

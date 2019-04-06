@@ -1,20 +1,19 @@
-# AppArmor Profiles Syntax Highlighting Definition for Kate
+# AppArmor Profiles Syntax Highlighting Definition for Kate (KSyntaxHighlighting Framework)
 
 ![Example of AppArmor profile syntax highlighting](https://raw.githubusercontent.com/nibags/apparmor-ksyntaxhighlighting/master/test/images/apparmor-preview.png)
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>)
 
-**Last Change:** September 2018
+**Last Change:** April 2019
 
 **Last Version:** Version 7 is included in KDE Frameworks 5.51.0+ and is based on AppArmor 2.13.0.
 
-```
-This file is part of the KDE's KSyntaxHighlighting Framework.
-```
+    This file is part of the KDE's KSyntaxHighlighting Framework.
+
 
 ## Description:
 
-Add syntax highlighting to KDE text editors (as Kate, KWrite, KDevelop 
+Add syntax highlighting to KDE text editors (such as Kate, KWrite, KDevelop 
 or any application that uses the KSyntaxHighlighting or KTextEditor Framework) 
 for the **AppArmor Security Profiles**.
 
@@ -34,8 +33,8 @@ consist of XML files that are compiled in the KDE Frameworks libraries.
 
 However, these XML files can also be stored in:
 
-	$HOME/.local/share/org.kde.syntax-highlighting/syntax/
-	/usr/share/org.kde.syntax-highlighting/syntax/
+    $HOME/.local/share/org.kde.syntax-highlighting/syntax/
+    /usr/share/org.kde.syntax-highlighting/syntax/
 
 For more details of KSyntaxHighlighting Framework, visit:
 * Official Repository: https://phabricator.kde.org/source/syntax-highlighting/
@@ -43,9 +42,11 @@ For more details of KSyntaxHighlighting Framework, visit:
 
 ## Installation:
 
-If you do not have the latest version of KDE Frameworks, you can manually install the latest `apparmor.xml` file. 
+If you do not have the latest version of KDE Frameworks, you can manually install 
+the latest `apparmor.xml` file.
 
-Copy the file `apparmor.xml` to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` (for local user) or `/usr/share/org.kde.syntax-highlighting/syntax/` (for all users).
+Copy the `apparmor.xml` file to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` 
+(for local user) or `/usr/share/org.kde.syntax-highlighting/syntax/` (for all users).
 
 Ex.: 
 For local user:
@@ -62,13 +63,14 @@ sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
 ## Usage:
 
 Syntax highlighting of AppArmor profiles is automatically applied to named files: 
-`bin.*`, `sbin.*`, `usr.bin.*`, `usr.sbin.*`, `usr.lib.*`, `usr.lib64.*`, `usr.lib32.*`, `usr.libx32.*`, 
-`usr.libexec.*`, `usr.local.bin.*`, `usr.local.sbin.*`, `usr.local.lib*`, `opt.*`, `etc.cron.*`, `snap.*`, `snap-update-ns.*` & `snap-confine.*`.
+`bin.*`, `sbin.*`, `usr.bin.*`, `usr.sbin.*`, `usr.lib.*`, `usr.lib64.*`, `usr.lib32.*`, 
+`usr.libx32.*`, `usr.libexec.*`, `usr.local.bin.*`, `usr.local.sbin.*`, `usr.local.lib*`, 
+`opt.*`, `etc.cron.*`, `snap.*`, `snap-update-ns.*` & `snap-confine.*`.
 
-You can also force the syntax highlighting, by writing a comment with: 
-```
-kate: syntax AppArmor Security Profile;
-```
+You can also force the syntax highlighting, by writing a comment with:
+
+    kate: syntax AppArmor Security Profile;
+
 
 ## List of Versions:
 
@@ -81,10 +83,20 @@ kate: syntax AppArmor Security Profile;
         <th>Relevant Changes</th>
     </tr>
     <tr>
+        <td>8</td>
+        <td>Apr. 02, 2019</td>
+        <td>-</td>
+        <td>2.13.2</td>
+        <td><ul>
+            <li>Do not highlight variable assignments and alias rules within profiles.</li>
+            <li>Remove one indentation.</li>
+        </ul></td>
+    </tr>
+    <tr>
         <td>7</td>
         <td>Sep. 15, 2018</td>
         <td>5.51.0</td>
-        <td></td>
+        <td>2.13.0</td>
         <td><ul>
             <li>Update itemData's style for the new Solarized color schemes of Kate.</li>
             <li>Fixed freezing of Kate when using this highlighter in open rules, after the update to KF5.50.0.</li>
@@ -97,8 +109,7 @@ kate: syntax AppArmor Security Profile;
          <td>2.13.0</td>
          <td><ul>
             <li>Add "if exists" in Include rules.</li>
-            <li>Fixes for Include rules, escapes, globbing in text quoted and more.</li>
-            <li>Improvements in paths that start with variables, hats, variable assignments and and many more.</li>
+            <li>Multiple fixes and improvements.</li>
         </ul></td>
     </tr>
     <tr>
