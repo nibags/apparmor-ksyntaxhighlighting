@@ -6,7 +6,7 @@
 
 **Last Change:** April 2019
 
-**Last Version:** Version 7 is included in KDE Frameworks 5.51.0+ and is based on AppArmor 2.13.0.
+**Last Version:** Version 8 is included in KDE Frameworks 5.58.0+ and is based on AppArmor 2.13.2.
 
     This file is part of the KDE's KSyntaxHighlighting Framework.
 
@@ -85,7 +85,7 @@ You can also force the syntax highlighting, by writing a comment with:
     <tr>
         <td>8</td>
         <td>Apr. 02, 2019</td>
-        <td>-</td>
+        <td>5.58.0</td>
         <td>2.13.2</td>
         <td><ul>
             <li>Do not highlight variable assignments and alias rules within profiles.</li>
