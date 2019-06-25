@@ -1,0 +1,130 @@
+# Defined
+
+@FOO = ""
+
+/bin/true {
+  if defined @FOO {
+    /bin/true rix,
+  }
+  if defined @BAR {
+    /bin/false rix,
+  }
+  /dev/null r,
+}
+
+# If/else
+
+$FOO=true
+
+/bin/false {
+  if not $FOO {
+    /bin/true rix,
+  } else {
+    /bin/false rix,
+  }
+}
+
+$FOO=true
+
+/bin/true {
+  ^TRUE {
+    if $FOO {
+      /bin/true rix,
+    } else {
+      /bin/false rix,
+    }
+  }
+
+  ^FALSE {
+    if not $FOO {
+      /bin/true rix,
+    } else {
+      /bin/false rix,
+    }
+  }
+}
+
+$FOO=true
+$BAR = false
+$FALSE = false
+
+/bin/true {
+  ^TRUE {
+    if $FOO {
+      /bin/true rix,
+    } else if $FALSE {
+      /bin/false rix,
+    } else if $BAR {
+      /dev/null r,
+    } else if not $FALSE {
+      /dev/null w,
+    } else if defined @B1 {
+      /tmp/1 rw,
+    } else if defined @B2 {
+      /tmp/2 rw,
+    } else if defined @B3 {
+      /tmp/3 rw,
+    } else {
+      /tmp/4 rw,
+    }
+  }
+
+  ^FALSE {
+    if not $FOO {
+      /bin/false rix,
+    } else if ${FALSE} {
+      /bin/true rix,
+    } else if $BAR {
+      /dev/null r,
+    } else if defined @B1 {
+      /tmp/1 rw,
+    } else if defined @B2 {
+      /tmp/2 rw,
+    } else if defined @B3 {
+      /tmp/3 rw,
+    } else {
+      /tmp/4 rw,
+    }
+  }
+}
+
+$FOO=true
+$BAR = False
+
+/bin/true {
+  /bin/false rix,
+  capability net_raw,
+  if ${FOO} {
+    ^hat1 {
+      /usr/bin/sendmail rix,
+    }
+  }
+  if not ${FOO} {
+    ^hat1 {
+      /usr/bin/sendmail rux,
+    }
+  }
+  /bin/true rix,
+  /bin/sh rix,
+  capability dac_override,
+}
+
+# Network
+
+/tmp/tcp/tcp_server {
+  tcp_accept from 127.0.0.1,
+  tcp_accept from 10.0.0.17 via eth1,
+  tcp_accept from 10.0.0.17/16:50-100 via eth1,
+  tcp_accept to 10.0.0.17/16:1024-65535 from 127.0.0.1 via eth1,
+  tcp_connect from 12.13.14.15/31:21,
+  tcp_accept from 12.13.15.128/25:1024-2048 via eth2,
+  tcp_accept from 10.0.1.1/24:1024-2048 to 192.168.1.1:70 via eth2:1,
+  tcp_accept to 192.168.2.1:70 from 10.0.2.1/24:1024-2048 via eth2:2,
+  tcp_connect from 10.0.4.1/255.0.255.0:1024-2048 to 192.168.4.1:70 via eth2:4,
+  /lib/libc.so.6	r,
+  /lib/ld-linux.so.2	r,
+  /etc/ld.so.cache	r,
+  /lib/libc-2.1.3.so	r,
+}
+
+# kate: syntax AppArmor Security Profile

@@ -41,6 +41,11 @@
       https://gitlab.com/apparmor/apparmor/wikis/Documentation
       https://manpages.ubuntu.com/manpages/disco/en/man5/apparmor.d.5.html
 
+  Features of this experimental file:
+   * Includes support for conditional expressions.
+   * tcp features of network rules.
+   * Is it necessary to rename "AppArmor Security Profile" => "AppArmor Profile"?
+
   Change log:
    * Version 9 [20-Jun-2019]: (AppArmor 2.13.3):
       - Add new network domain keywords.
@@ -117,9 +122,15 @@
 	</list>
 	<list name="qualifiers">
 		<item>audit</item>
-		<!-- noaudit/quiet, defined, not -->
+		<item>defined</item>
+		<item>not</item>
+		<!-- noaudit/quiet -->
 	</list>
-	<!-- Conditional: if, else -->
+	<!-- Conditional -->
+	<list name="conditional">
+		<item>if</item>
+		<item>else</item>
+	</list>
 
 	<!-- Capabilities, Capability Rule.
 	     Lowercase capability name without 'CAP_' prefix.
@@ -757,6 +768,10 @@
 		<item>remount</item>
 		<item>umount</item>
 	</list>
+	<list name="rule_name_tcp_client">
+		<item>tcp_connect</item>
+		<item>tcp_accept</item>
+	</list>
 	<list name="rule_name_alias"><item>alias</item></list>
 	<list name="rule_name_file"><item>file</item></list>
 	<list name="rule_name_capability"><item>capability</item></list>
@@ -819,7 +834,7 @@
 			<Detect2Chars context="_variable" attribute="Variable" char="@" char1="{" lookAhead="true"/>
 			<Detect2Chars context="_boolean" attribute="Variable" char="$" char1="{" lookAhead="true"/>
 			<keyword context="#stay" attribute="Other Option" String="boolean" insensitive="true"/>
-			<RegExpr context="#stay" attribute="Variable" String="\$&varName;(?=[\s\(\)\{\}&quot;@\$#\=\+]|$)"/>
+			<RegExpr context="#stay" attribute="Variable" String="[\$@]&varName;(?=[\s\(\)\{\}&quot;@\$#\=\+]|$)"/>
 
 			<!-- Brackets -->
 			<IncludeRules context="_brackets_error"/> <!-- {} -->
@@ -831,6 +846,7 @@
 			<keyword context="#stay" attribute="Access Qualifier" String="access_types"/>
 			<keyword context="#stay" attribute="Qualifier" String="qualifiers"/>
 			<keyword context="#stay" attribute="File Qualifier" String="file_qualifiers"/>
+			<keyword context="#stay" attribute="Conditional" String="conditional"/>
 
 			<!-- Rules -->
 			<keyword context="_rule_file" attribute="Rule" String="rule_name_file" beginRegion="Rule"/>
@@ -846,6 +862,7 @@
 			<keyword context="_rule_changeprofile" attribute="Rule" String="rule_name_changeprofile" beginRegion="Rule"/>
 			<keyword context="_rule_rlimit" attribute="Rule Error" String="rule_name_rlimit" beginRegion="Rule"/> <!-- set rlimit -->
 			<keyword context="_rule_set" attribute="Rule" String="rule_name_set"/>
+			<keyword context="_rule_tcp_client" attribute="Rule" String="rule_name_tcp_client" beginRegion="Rule"/>
 
 			<!-- Paths, text in quotes, file permissions and others -->
 			<IncludeRules context="_operators"/>
@@ -1098,6 +1115,19 @@
 		<context name="_rule_network" attribute="Normal Text" lineEndContext="#stay">
 			<keyword context="#stay" attribute="Data" String="rule_network"/>
 			<keyword context="#stay" attribute="Data" String="rule_network_unix"/>
+			<IncludeRules context="_default_rule"/>
+		</context>
+
+		<context name="_rule_tcp_client" attribute="Normal Text" lineEndContext="#stay">
+			<WordDetect context="#stay" attribute="Operator 2" String="to"/>
+			<WordDetect context="#stay" attribute="Operator 2" String="from"/>
+			<WordDetect context="#stay" attribute="Operator 2" String="via"/>
+			<!-- FIXME: Improve this! -->
+			<!-- IPv4 -->
+			<RegExpr context="#stay" attribute="IP Address" String="\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b"/>
+			<!-- IPv6 (Source: https://community.helpsystems.com/forums/intermapper/miscellaneous-topics/5acc4fcf-fa83-e511-80cf-0050568460e4 ) -->
+			<RegExpr context="#stay" attribute="IP Address" String="((\b([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(\b([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(\b([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(\b([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(\b([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(\b([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(\b([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))"/> <!-- End: (\%\w+\b)? -->
+			<RegExpr context="#stay" attribute="Normal Text" String="/(?=\:*\d)"/>
 			<IncludeRules context="_default_rule"/>
 		</context>
 
@@ -1357,6 +1387,7 @@
 			<keyword String="rule_name_link"          context="#pop!_rule_link"          attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 			<keyword String="rule_name_changeprofile" context="#pop!_rule_changeprofile" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 			<keyword String="rule_name_rlimit"        context="#pop!_rule_rlimit"        attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
+			<keyword String="rule_name_tcp_client"    context="#pop!_rule_tcp_client"    attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
 			<!-- This must be at the end of each rule context, to avoid replacing the 'unix' & 'remount' keywords
 			     ('unix' is also a domain of the network rule; 'remount' is also a flag of the mount rule). -->
 			<keyword String="rule_name_mount" context="#pop!_rule_mount" attribute="Rule Error" firstNonSpace="true" endRegion="Rule" beginRegion="Rule"/>
@@ -1380,6 +1411,7 @@
 			<keyword String="rule_name_link"          context="#pop" attribute="Rule Error" lookAhead="true" firstNonSpace="true"/>
 			<keyword String="rule_name_changeprofile" context="#pop" attribute="Rule Error" lookAhead="true" firstNonSpace="true"/>
 			<keyword String="rule_name_rlimit"        context="#pop" attribute="Rule Error" lookAhead="true" firstNonSpace="true"/>
+			<keyword String="rule_name_tcp_client"    context="#pop" attribute="Rule Error" lookAhead="true" firstNonSpace="true"/>
 			<!-- Keep at the end to avoid conflicts! -->
 			<keyword String="rule_name_mount" context="#pop" attribute="Rule Error" lookAhead="true" firstNonSpace="true"/>
 			<keyword String="rule_name_unix"  context="#pop" attribute="Rule Error" lookAhead="true" firstNonSpace="true"/>
@@ -1550,6 +1582,7 @@
 		<itemData name="Profile Head"     defStyleNum="dsFunction"  bold="1" underline="0" spellChecking="false"/>
 		<itemData name="Profile Name"     defStyleNum="dsFunction"  bold="0" underline="0" spellChecking="false"/>
 		<itemData name="Qualifier"        defStyleNum="dsKeyword"   bold="1" underline="0" spellChecking="false"/>
+		<itemData name="Conditional"      defStyleNum="dsControlFlow" bold="1" underline="0" spellChecking="false"/>
 		<itemData name="Access Qualifier" defStyleNum="dsWarning"   bold="1" underline="0" spellChecking="false"/>
 		<itemData name="File Qualifier"   defStyleNum="dsVariable"  bold="1" underline="0" spellChecking="false"/>
 		<itemData name="Rule"             defStyleNum="dsVariable"  bold="1" underline="0" spellChecking="false"/>
@@ -1566,6 +1599,7 @@
 		<itemData name="Operator 2"              defStyleNum="dsWarning"       bold="1" spellChecking="false"/>
 		<itemData name="Number"                  defStyleNum="dsDecVal"        spellChecking="false"/>
 		<itemData name="Numerical Unit"          defStyleNum="dsDecVal"        bold="1" spellChecking="false"/>
+		<itemData name="IP Address"              defStyleNum="dsFloat"         spellChecking="false"/>
 		<itemData name="End of Rule Char"        defStyleNum="dsNormal"        spellChecking="false"/>
 
 		<itemData name="Escape Char"               defStyleNum="dsSpecialChar"    bold="0" spellChecking="false"/>

@@ -4,21 +4,21 @@
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>)
 
-**Last Change:** April 2019
+**Last Change:** June 2019
 
-**Last Version:** Version 8 is included in KDE Frameworks 5.58.0+ and is based on AppArmor 2.13.2.
+**Last Version:** Version 9 is included in KDE Frameworks 5.60.0+ and is based on AppArmor 2.13.3.
 
     This file is part of the KDE's KSyntaxHighlighting Framework.
 
 
 ## Description:
 
-Add syntax highlighting to KDE text editors (such as Kate, KWrite, KDevelop 
-or any application that uses the KSyntaxHighlighting or KTextEditor Framework) 
+Add syntax highlighting to KDE text editors (such as Kate, KWrite, KDevelop
+or any application that uses the KSyntaxHighlighting or KTextEditor Framework)
 for the **AppArmor Security Profiles**.
 
-The `apparmor.xml` file contains the definition of the syntax highlighting. 
-If you want to test the highlighting, you can find a sample AppArmor profile 
+The `apparmor.xml` file contains the definition of the syntax highlighting.
+If you want to test the highlighting, you can find a sample AppArmor profile
 in the `test` folder.
 
 For details on the syntax of AppArmor profiles, visit:
@@ -28,7 +28,7 @@ For details on the syntax of AppArmor profiles, visit:
 
 ## About XML Files of Syntax Highlighting Definition:
 
-The syntax highlighting definition files, of the KSyntaxHighlighting Framework, 
+The syntax highlighting definition files, of the KSyntaxHighlighting Framework,
 consist of XML files that are compiled in the KDE Frameworks libraries.
 
 However, these XML files can also be stored in:
@@ -42,13 +42,13 @@ For more details of KSyntaxHighlighting Framework, visit:
 
 ## Installation:
 
-If you do not have the latest version of KDE Frameworks, you can manually install 
+If you do not have the latest version of KDE Frameworks, you can manually install
 the latest `apparmor.xml` file.
 
-Copy the `apparmor.xml` file to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/` 
+Copy the `apparmor.xml` file to `$HOME/.local/share/org.kde.syntax-highlighting/syntax/`
 (for local user) or `/usr/share/org.kde.syntax-highlighting/syntax/` (for all users).
 
-Ex.: 
+Ex.:
 For local user:
 ```bash
 mkdir -p $HOME/.local/share/org.kde.syntax-highlighting/syntax/
@@ -62,9 +62,9 @@ sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
 
 ## Usage:
 
-Syntax highlighting of AppArmor profiles is automatically applied to named files: 
-`bin.*`, `sbin.*`, `usr.bin.*`, `usr.sbin.*`, `usr.lib.*`, `usr.lib64.*`, `usr.lib32.*`, 
-`usr.libx32.*`, `usr.libexec.*`, `usr.local.bin.*`, `usr.local.sbin.*`, `usr.local.lib*`, 
+Syntax highlighting of AppArmor profiles is automatically applied to named files:
+`bin.*`, `sbin.*`, `usr.bin.*`, `usr.sbin.*`, `usr.lib.*`, `usr.lib64.*`, `usr.lib32.*`,
+`usr.libx32.*`, `usr.libexec.*`, `usr.local.bin.*`, `usr.local.sbin.*`, `usr.local.lib*`,
 `opt.*`, `etc.cron.*`, `snap.*`, `snap-update-ns.*` & `snap-confine.*`.
 
 You can also force the syntax highlighting, by writing a comment with:
@@ -81,6 +81,16 @@ You can also force the syntax highlighting, by writing a comment with:
         <th>KDE<br>Frameworks</th>
         <th>AppArmor<br>Support</th>
         <th>Relevant Changes</th>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>Jun. 20, 2019</td>
+        <td>5.60.0</td>
+        <td>2.13.3</td>
+        <td><ul>
+            <li>Add new network domain keywords.</li>
+            <li>Fixes: remove unsupported "to" operator for link rules and only highlight the "in" operator in mount rules. Only highlight valid numbers in rlimit rules.</li>
+        </ul></td>
     </tr>
     <tr>
         <td>8</td>
