@@ -42,7 +42,6 @@
       https://manpages.ubuntu.com/manpages/disco/en/man5/apparmor.d.5.html
 
   Change log:
-   * Version ? [03-Oct-2019]: Use non-capturing groups in RegExpr.
    * Version 9 [20-Jun-2019]: (AppArmor 2.13.3):
       - Add new network domain keywords.
       - Fixes: drop unsupported 'to' operator for link rules and only highlight the 'in'
