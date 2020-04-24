@@ -75,16 +75,6 @@ For all users:
 sudo mkdir -p /usr/share/org.kde.syntax-highlighting/syntax/
 sudo cp ./apparmor.xml /usr/share/org.kde.syntax-highlighting/syntax/
 ```
-For Kate's Flatpak package:
-```bash
-mkdir -p $HOME/.var/app/org.kde.kate/data/org.kde.syntax-highlighting/syntax/
-cp ./apparmor.xml $HOME/.var/app/org.kde.kate/data/org.kde.syntax-highlighting/syntax/
-```
-For Kate's Snap package:
-```bash
-mkdir -p $HOME/snap/kate/current/.local/share/org.kde.syntax-highlighting/syntax/
-cp ./apparmor.xml $HOME/snap/kate/current/.local/share/org.kde.syntax-highlighting/syntax/
-```
 
 ## Usage:
 
