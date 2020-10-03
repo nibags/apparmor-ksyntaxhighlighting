@@ -4,9 +4,9 @@
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>)
 
-**Last Change:** June 2019
+**Last Change:** October 2020
 
-**Last Version:** Version 9 is included in KDE Frameworks 5.60.0+ and is based on AppArmor 2.13.3.
+**Last Version:** Version 12 is included in KDE Frameworks 5.75.0+ and is based on AppArmor 3.0.
 
     This file is part of the KDE's KSyntaxHighlighting Framework.
 
@@ -23,7 +23,7 @@ in the `test` folder.
 
 For details on the syntax of AppArmor profiles, visit:
 * AppArmor Documentation: https://gitlab.com/apparmor/apparmor/wikis/Documentation
-* Man Page of apparmor.d: http://manpages.ubuntu.com/manpages/cosmic/en/man5/apparmor.d.5.html
+* Man Page of apparmor.d: https://manpages.ubuntu.com/manpages/focal/en/man5/apparmor.d.5.html
 * AppArmor Repository: https://gitlab.com/apparmor
 
 ## About XML Files of Syntax Highlighting Definition:
@@ -58,7 +58,7 @@ However, these XML files can also be stored in:
 
 For more details of KSyntaxHighlighting Framework, visit:
 * Official Repository: https://invent.kde.org/frameworks/syntax-highlighting
-* Documentation: https://docs.kde.org/trunk5/en/applications/katepart/highlight.html
+* Documentation: https://docs.kde.org/?application=katepart&branch=trunk5&path=highlight.html
 
 ## Installation:
 
@@ -101,6 +101,13 @@ You can also force the syntax highlighting, by writing a comment with:
         <th>KDE<br>Frameworks</th>
         <th>AppArmor<br>Support</th>
         <th>Relevant Changes</th>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>Oct. 02, 2020</td>
+        <td>5.75.0</td>
+        <td>3.0.0</td>
+        <td>Add ABI rules and new profile flags.</td>
     </tr>
     <tr>
         <td>9</td>
