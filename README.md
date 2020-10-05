@@ -1,6 +1,6 @@
 # AppArmor Profiles Syntax Highlighting Definition for Kate (KSyntaxHighlighting Framework)
 
-![Example of AppArmor profile syntax highlighting](https://raw.githubusercontent.com/nibags/apparmor-ksyntaxhighlighting/master/test/images/apparmor-preview.png)
+![Example of AppArmor profile syntax highlighting](https://raw.githubusercontent.com/nibags/apparmor-ksyntaxhighlighting/master/test/images/apparmor-ayu-mirage.png)
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>)
 
