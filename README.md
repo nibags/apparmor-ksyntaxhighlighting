@@ -4,9 +4,9 @@
 
 **Author:** Nibaldo González (<nibgonz@gmail.com>)
 
-**Last Change:** October 2020
+**Last Change:** February 2021
 
-**Last Version:** Version 12 is included in KDE Frameworks 5.75.0+ and is based on AppArmor 3.0.
+**Last Version:** Version 15 is included in KDE Frameworks 5.80.0+ and is based on AppArmor 3.0.
 
     This file is part of the KDE's KSyntaxHighlighting Framework.
 
@@ -23,7 +23,7 @@ in the `test` folder.
 
 For details on the syntax of AppArmor profiles, visit:
 * AppArmor Documentation: https://gitlab.com/apparmor/apparmor/wikis/Documentation
-* Man Page of apparmor.d: https://manpages.ubuntu.com/manpages/focal/en/man5/apparmor.d.5.html
+* Man Page of apparmor.d: https://manpages.ubuntu.com/manpages/hirsute/en/man5/apparmor.d.5.html
 * AppArmor Repository: https://gitlab.com/apparmor
 
 ## About XML Files of Syntax Highlighting Definition:
@@ -43,16 +43,20 @@ However, these XML files can also be stored in:
         <td>/usr/share/org.kde.syntax-highlighting/syntax/</td>
     </tr>
     <tr>
-        <td>For <a href="https://flathub.org/apps/details/org.kde.kate">Kate's Flatpak package</a></td>
-        <td>$HOME/.var/app/org.kde.kate/data/org.kde.syntax-highlighting/syntax/</td>
+        <td>For Flatpak packages</td>
+        <td>$HOME/.var/app/<em>package-name</em>/data/org.kde.syntax-highlighting/syntax/</td>
     </tr>
     <tr>
-        <td>For <a href="https://snapcraft.io/kate">Kate's Snap package</a></td>
-        <td>$HOME/snap/kate/current/.local/share/org.kde.syntax-highlighting/syntax/</td>
+        <td>For Snap packages</a></td>
+        <td>$HOME/snap/<em>package-name</em>/current/.local/share/org.kde.syntax-highlighting/syntax/</td>
     </tr>
     <tr>
         <td>On Windows</a></td>
         <td>%USERPROFILE%\AppData\Local\org.kde.syntax-highlighting\syntax\ </td>
+    </tr>
+    <tr>
+        <td>On macOS</td>
+        <td>$HOME/Library/Application Support/org.kde.syntax-highlighting/syntax/</td>
     </tr>
 </table>
 
@@ -101,6 +105,13 @@ You can also force the syntax highlighting, by writing a comment with:
         <th>KDE<br>Frameworks</th>
         <th>AppArmor<br>Support</th>
         <th>Relevant Changes</th>
+    </tr>
+    <tr>
+        <td>15</td>
+        <td>Feb. 19, 2021</td>
+        <td>5.80.0</td>
+        <td>3.0.0</td>
+        <td>Improvements in the performance of RegExpr rules.</td>
     </tr>
     <tr>
         <td>12</td>
